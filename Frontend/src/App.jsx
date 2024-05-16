@@ -1,22 +1,23 @@
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes, Outlet } from 'react-router-dom';
 import './App.css';
 import { SideBar } from './components/sideBar';
 import { LoginPage } from './pages/loginPage';
+import { Home } from "./pages/Home/Home"
 
 function App() {
-
   return (
     <>
       <Router>
-      <Routes>
-        <Route path="/">
-          <Route index element={<LoginPage />} />
-          <Route path="sidebar" element={<SideBar />} />
+        <Routes>
+          <Route path="/" element={<Home />}>
+            <Route index element={<SideBar />} />
+            <Route path="home" element={<Home />} />
           </Route>
-      </Routes>
-    </Router>
+        </Routes>
+        <Outlet />
+      </Router>
     </>
   )
 }
 
-export default App
+export default App;
