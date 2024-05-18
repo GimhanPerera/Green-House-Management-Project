@@ -24,12 +24,12 @@ const Profile = () => {
       password,
     });
     // Reset form fields after submission (if needed)
-    // setFirstName('');
-    // setLastName('');
-    // setMobilePhone('');
-    // setEmail('');
-    // setUserRole('User');
-    // setPassword('');
+    setFirstName('');
+    setLastName('');
+    setMobilePhone('');
+    setEmail('');
+    setUserRole('User');
+    setPassword('');
   };
 
   return (
