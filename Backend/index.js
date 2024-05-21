@@ -2,14 +2,14 @@ const express = require('express');
 const app = express();
 const cors = require("cors");
 
+//All request from http://localhost:3001/api/login goes to this
+const greenRoutes = require('./routes/greenRouter');
+
 const db = require('./models');
 app.use(express.json());
 app.use(cors());
 
-
-//All request from http://localhost:3001/api/login goes to this
-const loginRouter = require('./routes/loginRouter');
-app.use("/api/login",loginRouter);
+app.use("/api/green",greenRoutes);
 
 db.sequelize.sync().then(() => {
     app.listen(3001, () => {

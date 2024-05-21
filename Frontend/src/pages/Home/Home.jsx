@@ -1,6 +1,8 @@
 import * as React from "react";
+import { useState, useEffect } from 'react';
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
+import axios from 'axios';
 
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
@@ -23,6 +25,7 @@ import SensorsIcon from "@mui/icons-material/Sensors";
 import HistoryIcon from "@mui/icons-material/History";
 import AddAlertIcon from "@mui/icons-material/AddAlert";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { TextField, Button } from '@mui/material';
 import "./Home.css";
 
 const drawerWidth = 240;
@@ -105,6 +108,32 @@ export const Home = () => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+
+  //===============for get user details====================
+  const [inputValue, setInputValue] = useState('');
+  const [user2, setUser2] = useState(null);
+
+  const handleInputChange = (event) => {
+    const value = event.target.value;
+    if (/^\d{0,3}$/.test(value)) {
+      setInputValue(value);
+    }
+  };
+
+  const handleSubmit = () => {
+    console.log("Input Value:", inputValue);
+    // Fetch user details from the backend when the submit button is clicked
+    axios.get(`http://localhost:3001/api/green/profile/${inputValue}`)
+      .then(response => {
+        console.log(response.data);
+        setUser2(response.data);
+      })
+      .catch(error => {
+        console.error("There was an error fetching the user details!", error);
+      });
+  };
+  //=======================================================
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -310,7 +339,34 @@ export const Home = () => {
           <br />
           -msg from Bimindu-
         </Typography>
-        <Typography paragraph>Guys Import components to here 😊</Typography>
+        <Typography paragraph>Guys Import components to here 😊<br/></Typography>
+        
+        
+
+        <Typography paragraph><br/>
+        <TextField
+          label="Enter user ID"
+          variant="outlined"
+          value={inputValue}
+          onChange={handleInputChange}
+          inputProps={{ maxLength: 3 }}
+        />
+        <Button
+          variant="contained"
+          onClick={handleSubmit}
+          sx={{ ml: 2 }}
+        >
+          Submit
+        </Button>
+      </Typography>
+      {user2 && (
+        <Typography paragraph>
+          <strong>User Details:</strong>
+          {JSON.stringify(user2, null, 2)}
+        </Typography>
+      )}
+
+
       </Box>
     </Box>
   );
