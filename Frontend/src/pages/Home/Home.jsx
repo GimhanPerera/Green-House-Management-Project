@@ -1,31 +1,29 @@
-import * as React from "react";
-import { useState, useEffect } from 'react';
-import { styled, useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import axios from 'axios';
-
-import MuiDrawer from "@mui/material/Drawer";
-import MuiAppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import CssBaseline from "@mui/material/CssBaseline";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import AddAlertIcon from "@mui/icons-material/AddAlert";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import HistoryIcon from "@mui/icons-material/History";
+import MenuIcon from "@mui/icons-material/Menu";
+import SensorsIcon from "@mui/icons-material/Sensors";
+import MuiAppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import CssBaseline from "@mui/material/CssBaseline";
+import Divider from "@mui/material/Divider";
+import MuiDrawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import SensorsIcon from "@mui/icons-material/Sensors";
-import HistoryIcon from "@mui/icons-material/History";
-import AddAlertIcon from "@mui/icons-material/AddAlert";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { TextField, Button } from '@mui/material';
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import { styled, useTheme } from "@mui/material/styles";
+import axios from 'axios';
+import * as React from "react";
+import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import "./Home.css";
 
 const drawerWidth = 240;
@@ -99,7 +97,7 @@ export const Home = () => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [selectedItem, setSelectedItem] = React.useState("Dashboard");
-  const [user, setUser] = React.useState("මෝඩ Gimhan");
+  const [user, setUser] = React.useState("Gimhan");
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -136,10 +134,12 @@ export const Home = () => {
   //=======================================================
 
   return (
+
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar className="toolbar">
+        {/* Navigation bar TOP */}
+        <Toolbar className="toolbar" >
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -155,18 +155,20 @@ export const Home = () => {
           <Typography variant="h3" noWrap component="div" id="Heading">
             <div>Green</div>
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <div
-              className="userIconName"
-            >
-              <AccountCircleIcon
-                style={{ fontSize: "2.5rem", marginLeft: "10px" }}
-              />
-              <p style={{ fontSize: "1.5rem", marginLeft: "10px" }}>{user}</p>
-            </div>
+              <div
+                className="userIconName"
+              >
+                <AccountCircleIcon
+                  style={{ fontSize: "2.5rem", marginLeft: "10px" }}
+                />
+                <p style={{ fontSize: "1.5rem", marginLeft: "10px" }}>{user}</p>
+              </div>
             </div>
           </Typography>
         </Toolbar>
       </AppBar>
+
+      {/* Navigation bar Side */}
       <Drawer variant="permanent" open={open}>
         <DrawerHeader className="drawerHeader">
           <h3 style={{ color: "white", width: "100%" }}>Menu</h3>
@@ -180,66 +182,77 @@ export const Home = () => {
         </DrawerHeader>
         <Divider />
         <List className="navList">
-          <ListItem
-            disablePadding
-            sx={{
-              display: "block",
-              backgroundColor: selectedItem === "Dashboard" ? "#14b82d" : "",
-            }}
-            onClick={() => setSelectedItem("Dashboard")}
-          >
-            <ListItemButton
+
+          {/* Dashboard Button */}
+          <NavLink to="">
+            <ListItem
+              disablePadding
               sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
+                display: "block",
+                backgroundColor: selectedItem === "Dashboard" ? "#14b82d" : "",
               }}
+              onClick={() => setSelectedItem("Dashboard")}
             >
-              <ListItemIcon
+              <ListItemButton
                 sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
                 }}
               >
-                {" "}
-                <DashboardIcon className="listIcon" />
-              </ListItemIcon>
-              <ListItemText sx={{ opacity: open ? 1 : 0 }}>
-                <p className="listItemText">Dashboard</p>
-              </ListItemText>
-            </ListItemButton>
-          </ListItem>
-          <ListItem
-            disablePadding
-            sx={{
-              display: "block",
-              backgroundColor: selectedItem === "Sensor list" ? "#14b82d" : "",
-            }}
-            onClick={() => setSelectedItem("Sensor list")}
-          >
-            <ListItemButton
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  {" "}
+                  <DashboardIcon className="listIcon" />
+                </ListItemIcon>
+                <ListItemText sx={{ opacity: open ? 1 : 0 }}>
+                  <p className="listItemText">Dashboard</p>
+                </ListItemText>
+              </ListItemButton>
+            </ListItem>
+          </NavLink>
+
+          {/* Sensor list Button */}
+          <NavLink to="sensors">
+            <ListItem
+              disablePadding
               sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
+                display: "block",
+                backgroundColor: selectedItem === "Sensor list" ? "#14b82d" : "",
               }}
+              onClick={() => setSelectedItem("Sensor list")}
             >
-              <ListItemIcon
+              <ListItemButton
                 sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
                 }}
               >
-                {" "}
-                <SensorsIcon className="listIcon" />
-              </ListItemIcon>
-              <ListItemText sx={{ opacity: open ? 1 : 0 }}>
-                <p className="listItemText">Sensor list</p>
-              </ListItemText>
-            </ListItemButton>
-          </ListItem>
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  {" "}
+                  <SensorsIcon className="listIcon" />
+                </ListItemIcon>
+                <ListItemText sx={{ opacity: open ? 1 : 0 }}>
+                  <p className="listItemText">Sensor list</p>
+                </ListItemText>
+              </ListItemButton>
+            </ListItem>
+          </NavLink>
+
+          {/* History button Button */}
+          <NavLink to="history">
           <ListItem
             disablePadding
             sx={{
@@ -270,6 +283,9 @@ export const Home = () => {
               </ListItemText>
             </ListItemButton>
           </ListItem>
+          </NavLink>
+
+          {/* Alert button Button */}
           <ListItem
             disablePadding
             sx={{
@@ -300,6 +316,8 @@ export const Home = () => {
               </ListItemText>
             </ListItemButton>
           </ListItem>
+
+          {/* Profile button */}
           <ListItem
             disablePadding
             sx={{
@@ -332,42 +350,7 @@ export const Home = () => {
           </ListItem>
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <DrawerHeader />
-        <Typography paragraph>
-          Guys Import components to here 😊
-          <br />
-          -msg from Bimindu-
-        </Typography>
-        <Typography paragraph>Guys Import components to here 😊<br/></Typography>
-        
-        
 
-        <Typography paragraph><br/>
-        <TextField
-          label="Enter user ID"
-          variant="outlined"
-          value={inputValue}
-          onChange={handleInputChange}
-          inputProps={{ maxLength: 3 }}
-        />
-        <Button
-          variant="contained"
-          onClick={handleSubmit}
-          sx={{ ml: 2 }}
-        >
-          Submit
-        </Button>
-      </Typography>
-      {user2 && (
-        <Typography paragraph>
-          <strong>User Details:</strong>
-          {JSON.stringify(user2, null, 2)}
-        </Typography>
-      )}
-
-
-      </Box>
     </Box>
   );
 };
