@@ -1,17 +1,26 @@
-import { Route, BrowserRouter as Router, Routes, Outlet } from 'react-router-dom';
+import { Outlet, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
 import { SideBar } from './components/sideBar';
+import { Dashboard } from './pages/Dashboard/Dashboard';
+import { History } from './pages/History/History';
+import { Sensor } from './pages/Sensor/Sensor';
 import { LoginPage } from './pages/loginPage';
-import { Home } from "./pages/Home/Home"
+import ManagementSystem from './pages/managementSystem';
 
 function App() {
   return (
     <>
       <Router>
         <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<SideBar />} />
-            <Route path="home" element={<Home />} />
+          <Route path="/">
+            <Route index element={<LoginPage />} />
+            <Route path="system" element={< ManagementSystem />} >
+              <Route index element={<Dashboard />} />
+              <Route path="sensors" element={<Sensor />} />
+              <Route path="history" element={<History />} />
+              {/* New routes add to here */}
+            </Route>
+            <Route path="home" element={<SideBar />} />
           </Route>
         </Routes>
         <Outlet />
