@@ -42,9 +42,9 @@ db.Sequelize = Sequelize;
 
 module.exports = db;
 
-//m:n user alert
-db.user.belongsToMany(db.alert,{through: db.user_alert});
-db.alert.belongsToMany(db.user,{ through: db.user_alert});
+// //m:n user alert
+// db.user.belongsToMany(db.alert,{through: db.user_alert});
+// db.alert.belongsToMany(db.user,{ through: db.user_alert});
 
 //1:m sensor alert
 db.user.hasMany(db.sensor);

@@ -1,5 +1,6 @@
-const { history, sensor } = require('../models');
+const { history, sensor,user } = require('../models');
 const {validateToken} = require('../JWT');
+const {sendAlert} = require('./alertController');
 
 const getSensorHistoryById = async (req, res) => {
     try {
@@ -62,6 +63,33 @@ const receiveSensorData = async (req, res) => {
         if (!sensor1) {
             return res.status(404).json({ message: 'Sensor not found' });
         }
+        const userId = parseInt(sensor1.userUserId, 10);
+        console.log("userID ",userId)
+        //const user1 = await user.findOne({ where: { userId } });
+        //const email = user1.email;
+        if (measurement > sensor1.upper_limit ) {
+            const newHistory = await history.create({
+                dateTime: new Date(),
+                measurement,
+                status: 'High',
+                sensorSensorId: sensorId
+            });
+            const sensorDetails = {
+                sensorId: sensor1.sensorId,
+                sensorName: sensor1.sensorName,
+                upper_limit: sensor1.upper_limit,
+                lower_limit: sensor1.lower_limit,
+                value: measurement
+            }
+            console.log("Upper")
+            const answer = sendAlert(userId,sensorDetails)
+            return res.status(200).json(answer);
+        }
+        //
+        const user = await user.findByPk(sensor1.userUserId);
+        //USER EMAIL = user.email
+        //SENSOR UPPER LIMIT = sensor1.upper_limit
+        //SENSOR LOWER LIMIT = sensor1.lower_limit
 
         // Get the current max historyId
         const lastHistory = await history.findOne({

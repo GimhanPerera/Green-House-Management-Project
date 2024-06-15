@@ -31,9 +31,6 @@ const Login = async (req, res) => {
     }
 };
 
-module.exports = Login;
-
-
 
 module.exports = {
     Login

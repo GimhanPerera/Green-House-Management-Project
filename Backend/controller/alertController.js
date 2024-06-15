@@ -1,14 +1,17 @@
 var nodemailer = require('nodemailer');
-const { alert, sensor } = require('../models');
+const { alert, sensor,user } = require('../models');
 require('dotenv').config();
 
 //controller to send alerts
-const sendAlert = async (req, res) => {
+const sendAlert = async (userId, sensorDetails) => {
 
   try {
-    const { email, sensorDetails } = req.body;
+    //const { email, sensorDetails } = req.body;
     const { sensorId, sensorName, upper_limit, lower_limit, value } = sensorDetails;
     //create transport using nodemailer
+    const user1 = await user.findOne({ where: { userId } });
+    console.log("EMAIL ",user1.email," ",sensorName)
+    const email = user1.email;
     var transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -131,10 +134,9 @@ const sendAlert = async (req, res) => {
     //send trasporter to send the email
     transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
-        res.status(500).json({ status: 500, error });
-        console.log(error);
+        return "error"
       } else {
-        res.status(200).json({ status: 200, message: "Email sent" });
+        return "error"
       }
     });
     //update the database
@@ -146,7 +148,7 @@ const sendAlert = async (req, res) => {
 
   } catch (error) {
     console.log(error)
-    res.status(500).json({ status: 500, message: "Internal server error" });
+    return "Internal server error"
   }
 }
 
@@ -168,10 +170,10 @@ const getAllAlertDataOfUser = async (req, res) => {
       },
     });
     
-    res.status(200).json(alertList);
+    return "Success";
   } catch (error) {
     console.error(error)
-    res.status(400).json("Server error");
+    return "Server error";
   }
 }
 
