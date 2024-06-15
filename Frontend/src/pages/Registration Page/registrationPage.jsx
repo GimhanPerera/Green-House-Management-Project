@@ -1,5 +1,5 @@
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import React from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import './registrationPage.css'; // Import CSS for styling
 
@@ -38,6 +38,7 @@ const RegistrationPage = () => {
   };
 
   return (
+    <div className="registration-page">
     <div className="registration-container">
       <h2>Registration</h2>
       <Formik
@@ -76,6 +77,8 @@ const RegistrationPage = () => {
           </Form>
       </Formik>
     </div>
+    </div>
+
   );
 };
 
