@@ -2,7 +2,7 @@ module.exports = (sequelize, DataTypes) => {
     const user_alert = sequelize.define( 'user_alert',{
             
         userUserId: {
-            type: DataTypes.STRING(10),
+            type: DataTypes.INTEGER,
             references: {
               model: 'user', 
               key: 'userId',
@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         },
     
         alertAlertId: {
-            type: DataTypes.STRING(10),
+            type: DataTypes.INTEGER,
             references: {
             model: 'alert', 
             key: 'alertId',

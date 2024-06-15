@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const sensorController = require('../controller/sensorController') //import controller
+const alertController = require('../controller/alertController') //immport controller
 
 
 // http://localhost:3001/api/sensors
@@ -16,6 +17,8 @@ router.post("/add", sensorController.addSensor)
 
 //http://localhost:3001/api/sensors/edit
 router.post("/edit", sensorController.editSensor)
+//http://localhost:3001/api/sensors/alert
+router.post("/alert", alertController.sendAlert)
 
 //http://localhost:3001/api/sensors/data
 router.post("/data", sensorController.receiveSensorData);

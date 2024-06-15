@@ -2,12 +2,13 @@
 
 //     const alert = sequelize.define('alert', {
        
-//         alertId: {
-//             type: DataTypes.STRING(10),
-//             allowNull: false,
-//             primaryKey: true,
-//             defaultValue: '0',
-//         },
+        alertId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            autoIncrement: true,
+            primaryKey: true,
+            
+        },
        
 
 //         alert: {
