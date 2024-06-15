@@ -1,14 +1,13 @@
 import { Outlet, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
 import { SideBar } from './components/sideBar';
+import AlertPage from './pages/Alert Page/alertsPage';
 import { Dashboard } from './pages/Dashboard/Dashboard';
 import { History } from './pages/History/History';
 import RegistrationPage from './pages/Registration Page/registrationPage';
 import { Sensor } from './pages/Sensor/Sensor';
 import { LoginPage } from './pages/loginPage';
 import ManagementSystem from './pages/managementSystem';
-import RegistrationPage from './pages/Registration Page/registrationPage';
-import AlertPage from './pages/Alert Page/alertsPage';  
 
 
 function App() {
