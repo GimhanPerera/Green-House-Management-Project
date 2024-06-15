@@ -31,3 +31,11 @@
 #AddBtn:hover{
     background-color: green
 }
+
+.add-sensor-error-text {
+    color: #d93f34;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+  }
+  
