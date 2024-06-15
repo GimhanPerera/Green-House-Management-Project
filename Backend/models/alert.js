@@ -3,10 +3,11 @@ module.exports = (sequelize, DataTypes) => {
     const alert = sequelize.define('alert', {
        
         alertId: {
-            type: DataTypes.STRING(10),
+            type: DataTypes.INTEGER,
             allowNull: false,
+            autoIncrement: true,
             primaryKey: true,
-            defaultValue: '0',
+            
         },
        
 
