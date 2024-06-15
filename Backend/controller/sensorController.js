@@ -57,17 +57,33 @@ const addSensor = async (req, res) => {
 
 const receiveSensorData = async (req, res) => {
     try {
-        const { sensorId, measurement, status } = req.body;
+        const { sensorId, measurement } = req.body;
 
-        const sensor = await Sensor.findByPk(sensorId);
-        if (!sensor) {
+        const sensor1 = await sensor.findByPk(sensorId);
+        if (!sensor1) {
             return res.status(404).json({ message: 'Sensor not found' });
         }
 
-        const newHistory = await History.create({
+        // Get the current max historyId
+        const lastHistory = await history.findOne({
+            attributes: ['historyId'],
+            order: [['historyId', 'DESC']]
+        });
+
+        // Determine the new historyId
+        let newHistoryId;
+        if (lastHistory) {
+            newHistoryId = lastHistory.historyId + 1;
+        } else {
+            newHistoryId = 10000;
+        }
+
+        // Create the new history record
+        const newHistory = await history.create({
+            historyId: newHistoryId,
             dateTime: new Date(),
             measurement,
-            status,
+            status: 'ok',
             sensorSensorId: sensorId
         });
 
@@ -77,6 +93,8 @@ const receiveSensorData = async (req, res) => {
         res.status(500).json({ message: 'Failed to save sensor data' });
     }
 }
+
+
 
 const editSensor = async (req, res) => {
     try {
