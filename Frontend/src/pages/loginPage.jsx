@@ -21,6 +21,10 @@ export const LoginPage = () => {
             .required('Password is required'),
     })
 
+    const toRegForm = () => {
+        navigate('../registration');
+    }
+
     const onSubmit = async (values, actions) => {
         try {
             navigate('../system');
@@ -166,6 +170,10 @@ export const LoginPage = () => {
                                 </div>
                                 <Button type="submit" fullWidth variant="contained" sx={{ mt: 1, mb: 2 }}>
                                     Log in
+                                </Button>
+                                <p style={{width:'100%', textAlign:'center', fontSize:'0.8rem'}}>OR</p>
+                                <Button onClick={toRegForm} fullWidth variant="outlined" sx={{ mt: 1, mb: 2 }}>
+                                    Register
                                 </Button>
 
                             </form>
