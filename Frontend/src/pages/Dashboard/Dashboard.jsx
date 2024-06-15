@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
-//import { getSensors } from "../../FrontEndServices/SensorServices";
+import { getImageLink } from "../../FrontEndServices/SensorServices";
 import { AddSensor } from "../../components/AddSensor/AddSensor";
 import "./Dashboard.css";
 
@@ -34,13 +34,14 @@ export const Dashboard = () => {
 
   return (
     <div style={{ marginTop: "1rem" }}>
-      <div className="addSensorContainer">
+      <div className="addSensorContainer" style={{height:'3rem'}}>
         <AddSensor onSensorAdded={fetchSensors}/>
       </div>
       <Grid sx={{ flexGrow: 1 }} spacing={2}>
         <Grid item xs={12}>
           <Grid container justifyContent="center" spacing={spacing}>
             {sensors.map((sensor) => (
+              console.log(sensor),
               <Grid key={sensor.id} item>
                 <Card
                   sx={{ width: 311, minHeight:340 }}
@@ -49,7 +50,7 @@ export const Dashboard = () => {
                 >
                   <CardMedia
                     sx={{ height: 126 }}
-                    image={sensor.image}
+                    image={getImageLink(sensor.type)}
                     title="green iguana"
                   />
                   <CardContent>
@@ -73,10 +74,10 @@ export const Dashboard = () => {
                           <div
                             className="sensorStatus"
                             style={{
-                              color: sensor.status === "OK" ? "green" : "red",
+                              color: sensor.sensorStatus === "Ok" ? "green" : "red",
                             }}
                           >
-                            {sensor.status}
+                            {sensor.sensorStatus}
                           </div>
                         </div>
                         <div>

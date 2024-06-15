@@ -7,6 +7,7 @@ import axios from "axios";
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import { EditSensor } from '../../components/EditSensoe/EditSensor';
 
 //Table theme
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
@@ -52,6 +53,8 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
 }));
 
 
+
+
 export const Sensor = () => {
     const navigate = useNavigate();
     const { id } = useParams(); // Catch the sensor ID from the URL
@@ -77,6 +80,7 @@ export const Sensor = () => {
                     })
                 }));
                 setRows(formattedRows);
+                console.log(formattedRows);
                 setLoading(false);
             })
             .catch(error => {
@@ -98,12 +102,25 @@ export const Sensor = () => {
 
     if (loading) return <h2>Loading...</h2>;
 
+    const sensorData = {
+        type: sensor.type,
+        sensorId: sensor.sensorId,
+        sensorName: sensor.sensorName,
+        upper_limit: sensor.upper_limit,
+        lower_limit: sensor.lower_limit,
+        unit: sensor.unit,
+        description : sensor.description,
+     };
+    
+
     return (
         <>
             {/* Back button */}
             <Button variant='outlined' onClick={toBack} sx={{ m: '30px 0 0 30px' }} size='large'>Back</Button>
             {/* Save button */}
-            <Button variant="contained" sx={{ position: 'fixed', right: '0', m: '30px 50px 0 0' }} size='large'>Edit</Button>
+            <div className="editButton">
+                <EditSensor sensorData={sensorData} />
+            </div>
             <Box component="div" sx={{}}>
                 <div>
                     <Box component="h1" sx={{ textAlign: 'center', backgroundColor: 'blue' }}>Sensor Name: {sensor.sensorName}</Box>

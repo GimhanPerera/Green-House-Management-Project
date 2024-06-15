@@ -55,9 +55,34 @@ const addSensor = async (req, res) => {
     }
 }
 
+const editSensor = async (req, res) => {
+    
+    try {
+        const { sensorId, sensorName, description, upper_limit, lower_limit, unit } = req.body;
+
+        const updatedSensor = await sensor.update({
+            sensorName,
+            description,
+            upper_limit,
+            lower_limit,
+            unit
+        }, {
+            where: {
+                sensorId
+            }
+        });
+
+        res.status(201).json(updatedSensor);
+    } catch (error) {
+        console.error('Error adding sensor:', error);
+        res.status(500).json({ message: 'There was an error adding the sensor.' });
+    }
+}
+
 
 module.exports = {
     getSensorHistoryById,
     getAllSensorDataOfUser,
-    addSensor
+    addSensor,
+    editSensor
 }

@@ -326,6 +326,10 @@ const sensorTypeDescriptions = [
       "Soil moisture sensors are used to measure the amount of water in the soil. They are used in agriculture, horticulture, and other applications where soil moisture levels need to be monitored.",
   },
 ];
+const getImageLink = (type) => {
+  return sensorTypeDescriptions.find((sensorType) => sensorType.type === type)
+    .image;
+};
 
 const getSensorByType = (type) => {
   return sensors.filter((sensor) => sensor.type === type);
@@ -374,4 +378,5 @@ export {
   getSensorById,
   getSensorValues,
   getSensorTypeDescription,
+  getImageLink,
 };
