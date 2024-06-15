@@ -20,7 +20,4 @@ router.post("/edit", sensorController.editSensor)
 //http://localhost:3001/api/sensors/alert
 router.post("/alert", alertController.sendAlert)
 
-//http://localhost:3001/api/sensors/data
-router.post("/data", sensorController.receiveSensorData);
-
 module.exports = router;
