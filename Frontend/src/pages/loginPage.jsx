@@ -27,11 +27,8 @@ export const LoginPage = () => {
 
     const onSubmit = async (values, actions) => {
         try {
-            navigate('../system');
-            return
-
             // Check the detials
-            const response = await axios.post("http://localhost:3001/api/login", {
+            const response = await axios.post("http://localhost:3001/api/user/login", {
                 "email": values.email,
                 "password": values.password
             });

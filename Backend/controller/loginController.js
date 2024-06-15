@@ -1,10 +1,35 @@
 
+const { user } = require('../models');
+
 
 const Login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
 
-    
-    res.status(200).json("Success")
-}
+        // Fetch user from the database
+        const userFromDB = await user.findOne({ where: { email } });
+        
+        if (!userFromDB) {
+            return res.status(401).json({ error: "Wrong username or password" });
+        }
+
+        // Compare the plain text passwords
+        if (userFromDB.password !== password) {
+            return res.status(401).json({ error: "Wrong username or password" });
+        }
+        const response = {
+            "isValid":true
+        }
+        
+        res.status(200).json(response);
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+module.exports = Login;
+
 
 
 module.exports = {
