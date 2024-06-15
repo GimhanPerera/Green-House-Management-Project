@@ -18,12 +18,12 @@ const getSensorHistoryById = async (req, res) => {
 
 const getAllSensorDataOfUser = async (req, res) => {
     try {
-
         const sensorList = await sensor.findAll({
             where: {
                 	userUserId : req.userId
             },
         });
+        console.log("ID ",req.userId)
         res.status(200).json(sensorList);
     } catch (error) {
         console.error(error)
@@ -44,7 +44,7 @@ const addSensor = async (req, res) => {
             lower_limit,
             lastUpdate,
             unit,
-            userUserId
+            userUserId: req.userId
         });
 
         res.status(201).json(newSensor);
