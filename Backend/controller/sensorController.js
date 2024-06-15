@@ -55,32 +55,34 @@ const addSensor = async (req, res) => {
     }
 }
 
-const receiveSensorData = async (req, res) => {
+const editSensor = async (req, res) => {
+    
     try {
-        const { sensorId, measurement, status } = req.body;
+        const { sensorId, sensorName, description, upper_limit, lower_limit, unit } = req.body;
 
-        const sensor = await Sensor.findByPk(sensorId);
-        if (!sensor) {
-            return res.status(404).json({ message: 'Sensor not found' });
-        }
-
-        const newHistory = await History.create({
-            dateTime: new Date(),
-            measurement,
-            status,
-            sensorSensorId: sensorId
+        const updatedSensor = await sensor.update({
+            sensorName,
+            description,
+            upper_limit,
+            lower_limit,
+            unit
+        }, {
+            where: {
+                sensorId
+            }
         });
 
-        res.status(201).json(newHistory);
+        res.status(201).json(updatedSensor);
     } catch (error) {
-        console.error('Error saving sensor data:', error);
-        res.status(500).json({ message: 'Failed to save sensor data' });
+        console.error('Error adding sensor:', error);
+        res.status(500).json({ message: 'There was an error adding the sensor.' });
     }
 }
+
 
 module.exports = {
     getSensorHistoryById,
     getAllSensorDataOfUser,
     addSensor,
-    receiveSensorData
+    editSensor
 }
