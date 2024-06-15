@@ -14,4 +14,7 @@ router.get("/sensorDataByUserId/:id", sensorController.getAllSensorDataOfUser)
 // http://localhost:3001/api/sensors/add
 router.post("/add", sensorController.addSensor)
 
+//http://localhost:3001/api/sensors/edit
+router.post("/edit", sensorController.editSensor)
+
 module.exports = router;
