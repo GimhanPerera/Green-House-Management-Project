@@ -1,28 +1,53 @@
-module.exports = (sequelize, DataTypes) => {
+// module.exports = (sequelize, DataTypes) => {
 
-    const history = sequelize.define('history', {
+//     const history = sequelize.define('history', {
        
-        historyId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            primaryKey: true,
-        },
+//         historyId: {
+//             type: DataTypes.INTEGER,
+//             allowNull: false,
+//             primaryKey: true,
+//         },
 
-        dateTime:{
-            type:DataTypes.DATE,
-        },
+//         dateTime:{
+//             type:DataTypes.DATE,
+//         },
 
-        measurement: {
-            type: DataTypes.FLOAT,
-        },
+//         measurement: {
+//             type: DataTypes.FLOAT,
+//         },
 
-        status: {
-            type: DataTypes.STRING,
-        },
+//         status: {
+//             type: DataTypes.STRING,
+//         },
 
-    },{
-        timestamps: false
-    });
+//     },{
+//         timestamps: false
+//     });
 
-    return history;
-}
+//     return history;
+// }
+
+// models/history.js
+module.exports = (sequelize, DataTypes) => {
+  const History = sequelize.define('History', {
+    historyId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true, // Set auto increment
+    },
+    dateTime: {
+      type: DataTypes.DATE,
+    },
+    measurement: {
+      type: DataTypes.FLOAT,
+    },
+    status: {
+      type: DataTypes.STRING,
+    }
+  }, {
+    timestamps: false // Disable timestamps
+  });
+
+  return History;
+};
