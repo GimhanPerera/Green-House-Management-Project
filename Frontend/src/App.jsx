@@ -16,7 +16,9 @@ function App() {
             <Route index element={<LoginPage />} />
             <Route path="system" element={< ManagementSystem />} >
               <Route index element={<Dashboard />} />
-              <Route path="sensors" element={<Sensor />} />
+              <Route path="sensor" >
+                <Route path=":id" element={<Sensor />} />
+              </Route>
               <Route path="history" element={<History />} />
               {/* New routes add to here */}
             </Route>
