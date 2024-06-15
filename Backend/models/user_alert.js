@@ -16,7 +16,9 @@ module.exports = (sequelize, DataTypes) => {
             key: 'alertId',
             }
         },
-        }  
+        },{
+            timestamps: false
+        }
     );
     return user_alert;
 } 
