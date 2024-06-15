@@ -1,10 +1,12 @@
 import { Box, Button } from '@mui/material';
+import axios from "axios";
 import { useFormik } from 'formik';
 import React from 'react';
 import { useNavigate } from "react-router-dom";
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import * as Yup from 'yup';
+import loginImg from '../assets/loginImg.jpg';
 
 export const LoginPage = () => {
 
@@ -20,7 +22,28 @@ export const LoginPage = () => {
     })
 
     const onSubmit = async (values, actions) => {
-        navigate('../system');
+        try {
+            navigate('../system');
+            return
+
+            // Check the detials
+            const response = await axios.post("http://localhost:3001/api/login", {
+                "email": values.email,
+                "password": values.password
+            });
+            if (response.data.isValid) {
+                navigate('../system');
+            }
+            else {
+                toast.error("Invalid email or password");
+            }
+        } catch (error) {
+            if (error.response && error.response.data && error.response.data.error) {
+                toast.error(error.response.data.error);
+            } else {
+                toast.error("An unexpected error occurred. Please try again.");
+            }
+        }
 
     }
     const { values, errors, handleBlur, handleChange, handleSubmit, touched } = useFormik({
@@ -57,6 +80,9 @@ export const LoginPage = () => {
                             display: 'flex',
                             flexDirectionL: 'row'
                         }}>
+                        <Box component="div">
+                            <img src={loginImg} alt='login image' style={{ width: '26.4rem', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)', }} />
+                        </Box>
                         <Box component="div"
                             sx={{
                                 height: '23rem',
