@@ -1,0 +1,39 @@
+.cardDescription{
+    height: 60px;
+    overflow: hidden;
+}
+.sensorCard{
+    cursor: pointer;
+    border-radius: 12px;
+}
+.sensorCard:hover{
+    background-color: #f0f0f0;
+}
+
+.cardContainer{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.sensorStatus{
+    font-weight: bold;
+}
+.sensorStatusContainer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    margin-bottom: -20px;
+}
+.sensorReadingContainer{
+    display: flex;
+    height: 75%;
+}
+
+.addSensorContainer{
+    display: flex;
+    justify-content: right;
+    margin-bottom: 2rem;
+    margin-right: 5rem;
+}

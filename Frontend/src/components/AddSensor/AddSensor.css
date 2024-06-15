@@ -1,0 +1,33 @@
+.sensorName{
+    display: flex;
+}
+
+.description{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.sensorRange{
+    display: flex;
+}
+.unitButtonContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.unit{
+    width: 50%;
+}
+.buttonContainer{
+    width: 50%;
+    display: flex;
+    gap: 1rem;
+    justify-content: right;
+    margin-right: 5px;
+}
+#AddBtn{
+    background-color: #017148;
+}
+#AddBtn:hover{
+    background-color: green
+}
