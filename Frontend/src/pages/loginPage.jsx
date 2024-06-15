@@ -33,6 +33,7 @@ export const LoginPage = () => {
                 "password": values.password
             });
             if (response.data.isValid) {
+                localStorage.setItem("accessToken", response.data.accessToken);
                 navigate('../system');
             }
             else {

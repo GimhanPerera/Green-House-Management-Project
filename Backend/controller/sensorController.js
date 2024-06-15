@@ -1,4 +1,5 @@
 const { history, sensor } = require('../models');
+const {validateToken} = require('../JWT');
 
 const getSensorHistoryById = async (req, res) => {
     try {
@@ -17,14 +18,12 @@ const getSensorHistoryById = async (req, res) => {
 
 const getAllSensorDataOfUser = async (req, res) => {
     try {
-        //Need to implement the logic for only sensors what we need
 
         const sensorList = await sensor.findAll({
-            // where: {
-            //     sensorSensorId: req.params.id,
-            // },
+            where: {
+                	userUserId : req.userId
+            },
         });
-        
         res.status(200).json(sensorList);
     } catch (error) {
         console.error(error)

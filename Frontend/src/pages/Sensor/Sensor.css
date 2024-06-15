@@ -1,0 +1,23 @@
+.editPgBtns{
+    display: flex;
+    justify-content: space-between;
+    height: 5rem;
+    align-items: center;
+    color: #ffffff;
+    background-color: #00cc00;
+}
+.sensorNameDiv{
+    color: #ffffff;
+}
+.sensorInfoLabel{
+    display: flex;
+    justify-content: right;
+    font-weight: bold;
+    color: rgba(46, 46, 46, 0.77);
+}
+.sensorInfo{
+    font-weight: bolder;
+}
+.editButton{
+    margin-right: 3rem;
+}

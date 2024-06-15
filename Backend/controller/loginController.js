@@ -1,5 +1,4 @@
 const { user } = require('../models');
-const md5 = require('md5');
 
 
 const Login = async (req, res) => {
@@ -8,7 +7,6 @@ const Login = async (req, res) => {
 
         // Fetch user from the database
         const userFromDB = await user.findOne({ where: { email } });
-        
         if (!userFromDB) {
             return res.status(401).json({ error: "Wrong username or password" });
         }
@@ -17,8 +15,10 @@ const Login = async (req, res) => {
         if (userFromDB.password !== md5(password)) {
             return res.status(401).json({ error: "Wrong username or password" });
         }
+        const accessToken = createToken(userFromDB.userId);
         const response = {
-            "isValid":true
+            "isValid":true,
+            "accessToken":accessToken,
         }
         
         res.status(200).json(response);
