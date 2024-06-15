@@ -12,13 +12,13 @@ const sendAlert = async (req, res) => {
         var transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'xxxxx@gmail.com',
+                user: 'xxxxxxx@gmail.com',
                 pass: process.env.PASSWORD
             }
         });
         // structuring the email
         var mailOptions = {
-            from: 'xxxxxx@gmail.com',
+            from: 'xxxxxxx@gmail.com',
             to: email,
             subject: "Sensor Alert",
             html: `<!DOCTYPE html>
@@ -139,7 +139,7 @@ const sendAlert = async (req, res) => {
         });
         //update the database
         await alert.create({
-            alert:'Out of Range',
+            alert:`${value} is out of range; ${lower_limit} -${upper_limit}`,
             dateTime: new Date(),
             sensorSensorId:sensorId,
         })
