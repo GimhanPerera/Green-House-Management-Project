@@ -18,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(30),
         },
 
+        // mobile: {
+        //     type: DataTypes.STRING,
+        // },
+
         email: {
             type: DataTypes.STRING,
         },
