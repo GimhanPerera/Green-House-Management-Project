@@ -12,7 +12,7 @@ function ManagementSystem() {
   return (
     <div style={{ display: 'flex' }}>
       <Home />
-      <div style={{ marginTop: '4rem' }}>
+      <div style={{ marginTop: '4rem', width:'100%' }}>
         <Outlet />
       </div>
     </div>
