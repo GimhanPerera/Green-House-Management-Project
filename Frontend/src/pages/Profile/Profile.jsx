@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Box, Button, Container, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
 export const Profile = () => {
-    const navigate = useNavigate();
 
     const [profile, setProfile] = useState({
         firstName: '',
@@ -66,7 +64,6 @@ export const Profile = () => {
         <Container sx={{ mt: 5 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Typography variant="h4">Selected ID : 2</Typography>
-                <Button variant="contained" color="success" onClick={() => navigate('/system/profile/new_user')}>Add new user</Button>
             </Box>
             <Box component="form" sx={{ mt: 3 }}>
                 <TextField
