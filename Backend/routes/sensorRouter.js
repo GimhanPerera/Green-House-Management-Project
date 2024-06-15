@@ -10,4 +10,8 @@ router.get("/historyById/:id", sensorController.getSensorHistoryById)
 
 // http://localhost:3001/api/sensors/sensorDataByUserId/:id
 router.get("/sensorDataByUserId/:id", sensorController.getAllSensorDataOfUser)
+
+// http://localhost:3001/api/sensors/add
+router.post("/add", sensorController.addSensor)
+
 module.exports = router;
