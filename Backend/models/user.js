@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         },
 
         l_name: {
-            type: DataTypes.STRING(30),   
+            type: DataTypes.STRING(30),
         },
 
         email: {
@@ -26,9 +26,9 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.STRING,
         },
 
-        role:{
-            type:DataTypes.STRING(30),
-        }, 
+        // role:{
+        //     type:DataTypes.STRING(30),
+        // }, 
     },{
         timestamps: false
     });

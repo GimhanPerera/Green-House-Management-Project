@@ -8,4 +8,6 @@ const sensorController = require('../controller/sensorController') //import cont
 // http://localhost:3001/api/sensors/historyById/:id
 router.get("/historyById/:id", sensorController.getSensorHistoryById)
 
+// http://localhost:3001/api/sensors/sensorDataByUserId/:id
+router.get("/sensorDataByUserId/:id", sensorController.getAllSensorDataOfUser)
 module.exports = router;

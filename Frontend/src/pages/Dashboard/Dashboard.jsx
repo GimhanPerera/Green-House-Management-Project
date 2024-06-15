@@ -1,23 +1,35 @@
-import React, { useState, useEffect } from "react";
-import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
+import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
-import { getSensors } from "../../FrontEndServices/SensorServices";
+//import { getSensors } from "../../FrontEndServices/SensorServices";
 import { AddSensor } from "../../components/AddSensor/AddSensor";
 import "./Dashboard.css";
 
 export const Dashboard = () => {
   const spacing = 2;
+  const [loading, setLoading] = useState(true);
   const [sensors, setSensors] = useState([]);
   const navigate = useNavigate(); // Create a navigate function
 
   // useEffect is a hook that runs after the first render and every time the component updates
   //to fetch the sensors from the backend which are related to the user
   useEffect(() => {
-    setSensors(getSensors());
+    //setSensors(getSensors());
+    const id = 'User_id'; //User ID should be here
+    axios.get(`http://localhost:3001/api/sensors/sensorDataByUserId/${id}`)
+          .then((response) => {
+              setSensors(response.data);
+              setLoading(false);
+          })
+          .catch(error => {
+              console.error(error);
+              setLoading(false);
+          });
   }, []);
 
   return (
@@ -25,7 +37,7 @@ export const Dashboard = () => {
       <div className="addSensorContainer">
         <AddSensor />
       </div>
-      <Grid sx={{ flexGrow: 1 }} container spacing={2}>
+      <Grid sx={{ flexGrow: 1 }} spacing={2}>
         <Grid item xs={12}>
           <Grid container justifyContent="center" spacing={spacing}>
             {sensors.map((sensor) => (
@@ -33,7 +45,7 @@ export const Dashboard = () => {
                 <Card
                   sx={{ maxWidth: 311 }}
                   className="sensorCard"
-                  onClick={() => navigate(`/sensor/${sensor.id}`)}
+                  onClick={() => navigate(`./sensor/${sensor.sensorId}`, { state: { sensor } })}
                 >
                   <CardMedia
                     sx={{ height: 126 }}

@@ -47,6 +47,10 @@ db.user.belongsToMany(db.alert,{through: db.user_alert});
 db.alert.belongsToMany(db.user,{ through: db.user_alert});
 
 //1:m sensor alert
+db.user.hasMany(db.sensor);
+db.sensor.belongsTo(db.user);
+
+//1:m sensor alert
 db.sensor.hasMany(db.alert);
 db.alert.belongsTo(db.sensor);
 
