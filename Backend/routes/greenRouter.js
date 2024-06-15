@@ -1,11 +1,9 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const loginContraller = require('../controller/loginController') //import controller
 const loadProfileController = require('../controller/loadProfileController');
 
-
-//Login
-router.get("/", loginContraller.Login)
 router.get("/profile/:userId", loadProfileController.getUserById);
+router.put("/profile/:userId", loadProfileController.updateUserById);
 
 module.exports = router;
+

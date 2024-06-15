@@ -7,6 +7,7 @@ import { History } from './pages/History/History';
 import RegistrationPage from './pages/Registration Page/registrationPage';
 import { Sensor } from './pages/Sensor/Sensor';
 import { Profile } from './pages/Profile/Profile';
+import { NewUser } from './pages/Profile/newUser';
 import { LoginPage } from './pages/loginPage';
 import ManagementSystem from './pages/managementSystem';
 
@@ -26,6 +27,7 @@ function App() {
               <Route path="history" element={<History />} />
               <Route path="alerts" element={<AlertPage />} />
               <Route path="profile" element={<Profile />} />
+              <Route path="profile/new_user" element={<NewUser />} />
               {/* New routes add to here */}
             </Route>
             <Route path="home" element={<SideBar />} />
