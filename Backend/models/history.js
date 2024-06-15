@@ -1,15 +1,16 @@
 module.exports = (sequelize, DataTypes) => {
 
     const history = sequelize.define('history', {
-       
+
         historyId: {
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
+            autoIncrement: true,
         },
 
-        dateTime:{
-            type:DataTypes.DATE,
+        dateTime: {
+            type: DataTypes.DATE,
         },
 
         measurement: {
@@ -20,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
         },
 
-    },{
+    }, {
         timestamps: false
     });
 

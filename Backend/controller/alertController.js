@@ -12,13 +12,13 @@ const sendAlert = async (req, res) => {
         var transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'xxxxxxx@gmail.com',
-                pass: process.env.PASSWORD
+               user: process.env.EMAIL,
+               pass: process.env.PASSWORD
             }
         });
         // structuring the email
         var mailOptions = {
-            from: 'xxxxxxx@gmail.com',
+            from: process.env.EMAIL,
             to: email,
             subject: "Sensor Alert",
             html: `<!DOCTYPE html>

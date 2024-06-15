@@ -1,28 +1,28 @@
 module.exports = (sequelize, DataTypes) => {
 
-    const alert = sequelize.define('alert', {
-       
-        alertId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            autoIncrement: true,
-            primaryKey: true,
-            
-        },
-       
+  const alert = sequelize.define('alert', {
+     
+      alertId: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+          autoIncrement: true,
+          primaryKey: true,
+          
+      },
+     
 
-        alert: {
-            type: DataTypes.STRING,
+      alert: {
+          type: DataTypes.STRING,
 
-        },
+      },
 
-        dateTime:{
-            type:DataTypes.DATE,
-        }
+      dateTime:{
+          type:DataTypes.DATE,
+      }
 
-    },{
-        timestamps: false
-    });
+  },{
+      timestamps: false
+  });
 
-    return alert;
+  return alert;
 }
