@@ -13,8 +13,6 @@ const Login = async (req, res) => {
         }
 
         // Compare the plain text passwords
-        console.log(userFromDB.password);
-        console.log(md5(password));
         if (userFromDB.password !== md5(password)) {
             return res.status(401).json({ error: "Wrong username or password" });
         }
@@ -33,8 +31,26 @@ const Login = async (req, res) => {
 
 module.exports = Login;
 
+const getUserName = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const userFromDB = await user.findOne({ where: { userId } });
+        if (!userFromDB) {
+            return res.status(401).json({ error: "User not found" });
+        }
+        const response = {
+            "f_name":userFromDB.f_name,
+            "l_name":userFromDB.l_name,
+        }
+        res.status(200).json(response);
+    } catch (error) {
+        console.error('Error getting user name:', error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+module.exports = getUserName;
 
 
-module.exports = {
-    Login
-}
+
+module.exports = { Login, getUserName };

@@ -3,25 +3,24 @@ const { alert, sensor } = require('../models');
 require('dotenv').config();
 
 //controller to send alerts
-const sendAlert = async (req, res) => {
-
-  try {
-    const { email, sensorDetails } = req.body;
-    const { sensorId, sensorName, upper_limit, lower_limit, value } = sensorDetails;
-    //create transport using nodemailer
-    var transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL,
-        pass: process.env.PASSWORD
-      }
-    });
-    // structuring the email
-    var mailOptions = {
-      from: process.env.EMAIL,
-      to: email,
-      subject: "Sensor Alert",
-      html: `<!DOCTYPE html>
+const sendAlert = async (email,sensorDetails) => {
+    
+    try{
+        const { sensorId, sensorName, upper_limit, lower_limit, value} = sensorDetails;
+        //create transport using nodemailer
+        var transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+               user: process.env.EMAIL,
+               pass: process.env.PASSWORD
+            }
+        });
+        // structuring the email
+        var mailOptions = {
+            from: process.env.EMAIL,
+            to: email,
+            subject: "Sensor Alert",
+            html: `<!DOCTYPE html>
             <html lang="en">
             <head>
               <meta charset="UTF-8">

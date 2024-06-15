@@ -3,7 +3,7 @@ const db = require('../models');
 const loadProfileController = {
     getUserById: async (req, res) => {
         try {
-            const { userId } = req.params;
+            const  userId  = req.userId;
             const user = await db.user.findOne({ where: { userId } });
             if (user) {
                 res.json(user);
@@ -17,7 +17,7 @@ const loadProfileController = {
     },
     updateUserById: async (req, res) => {
         try {
-            const { userId } = req.params;
+            const  userId  = req.userId;
             const { f_name, l_name, email } = req.body;
             const [updated] = await db.user.update(
                 { f_name, l_name, email },

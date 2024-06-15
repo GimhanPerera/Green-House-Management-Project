@@ -67,9 +67,12 @@ export const Sensor = () => {
   const sensor = state ? state.sensor : null; // Access sensor data from state
 
   useEffect(() => {
-    //const id = 'S001';
-    axios
-      .get(`http://localhost:3001/api/sensors/historyById/${id}`)
+    const accessToken = localStorage.getItem("accessToken");
+    axios.get(`http://localhost:3001/api/sensors/historyById/${id}`, {
+      headers: {
+        "access-token": accessToken,
+      },
+    })
       .then((response) => {
         // Format date-time strings
         const formattedRows = response.data.map((entry) => ({
