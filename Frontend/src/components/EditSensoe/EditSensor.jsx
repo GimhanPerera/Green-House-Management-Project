@@ -102,6 +102,7 @@ const editSensor = async () => {
   if (!validate()) return;
 
     try {
+        const accessToken = localStorage.getItem("accessToken");
         const response = await axios.post("http://localhost:3001/api/sensors/edit", {
             sensorId: sensorId,
             sensorName: sensorName,
@@ -109,6 +110,10 @@ const editSensor = async () => {
             upper_limit: maxValue,
             lower_limit: minValue,
             unit: unit
+        },{
+          headers: {
+            "access-token": accessToken,
+          },
         });
         // Assuming response is successful if this line is reached
         Swal.fire({
@@ -122,13 +127,24 @@ const editSensor = async () => {
 
 
     } catch (error) {
-        console.error('Error editing sensor:', error);
+      if (error.response.status===402){
         Swal.fire({
-            title: "Error",
-            text: "There was an error editing the sensor.",
-            icon: "error",
-            confirmButtonColor: "#d33",
+          icon: "error",
+          title: "Oops...",
+          text: "Session expired. Please login again.",
+          confirmButtonColor: "#d33",
         });
+        setOpen(false); 
+      } else {
+        console.error("Error adding sensor:", error);
+        setOpen(false); // Close the modal if you have a modal state
+        Swal.fire({
+          title: "Error",
+          text: "There was an error editing the sensor.",
+          icon: "error",
+          confirmButtonColor: "#d33",
+        });
+      }
     }
     setOpen(false);
 };

@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate from react
 import { getImageLink } from "../../FrontEndServices/SensorServices";
 import { AddSensor } from "../../components/AddSensor/AddSensor";
 import "./Dashboard.css";
+import Swal from "sweetalert2";
 
 export const Dashboard = () => {
   const spacing = 2;
@@ -18,15 +19,31 @@ export const Dashboard = () => {
 
   const fetchSensors = async () => {
     setLoading(true);
-    const id = 'User_id'; // User ID should be here
+    //const accessToken = req.headers["access-token"]  This is how token is validated in the backend
+    const id = '1'; // User ID should be here
+    const accessToken = localStorage.getItem("accessToken"); // Get the token from local storage
     try {
-      const response = await axios.get(`http://localhost:3001/api/sensors/sensorDataByUserId/${id}`);
+      const response = await axios.get(`http://localhost:3001/api/sensors/sensorDataByUserId`, {
+        headers: {
+          "access-token": accessToken,
+        },
+      });
       setSensors(response.data);
     } catch (error) {
-      console.error(error);
+      if(error.status===402){
+        navigate('../login');  
+      }else{
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Error fetching sensors!",
+        });
+        console.log(error);
+      }
     }
     setLoading(false);
   };
+
 
   useEffect(() => {
     fetchSensors();

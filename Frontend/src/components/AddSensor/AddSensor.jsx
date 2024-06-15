@@ -15,7 +15,7 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 import "./AddSensor.css";
 
 const ITEM_HEIGHT = 48;
@@ -92,44 +92,62 @@ export const AddSensor = ({ onSensorAdded }) => {
 
   // Add a function to add a sensor
   const addSensor = async () => {
-
     const errors = validateInputs();
     if (Object.keys(errors).length > 0) {
-      setErrors(errors);  
+      setErrors(errors);
       return;
     }
 
     try {
-      const response = await axios.post("http://localhost:3001/api/sensors/add", {
-        sensorName: sensorName,
-        type: sensorType,
-        description: sensorDescription,
-        sensorStatus: 'Ok',
-        upper_limit: maxValue,
-        lower_limit: minValue,
-        lastUpdate: null,
-        unit: unit,
-        userUserId: '1'
-      });
-  
+      const accessToken = localStorage.getItem("accessToken"); // Get the token from local storage
+      const response = await axios.post(
+        "http://localhost:3001/api/sensors/add",
+        {
+          sensorName: sensorName,
+          type: sensorType,
+          description: sensorDescription,
+          sensorStatus: "Ok",
+          upper_limit: maxValue,
+          lower_limit: minValue,
+          lastUpdate: null,
+          unit: unit,
+          userUserId: "1",
+        },
+        {
+          headers: {
+            "access-token": accessToken,
+          },
+        }
+      );
+
       Swal.fire({
         title: "Good job!",
         text: "Sensor added successfully!",
         icon: "success",
         confirmButtonColor: "#017148",
       });
-  
+
       setOpen(false); // Close the modal if you have a modal state
       onSensorAdded(); // Call the callback function to refresh the sensor list
     } catch (error) {
-      console.error('Error adding sensor:', error);
-      setOpen(false); // Close the modal if you have a modal state
-      Swal.fire({
-        title: "Error",
-        text: "There was an error adding the sensor.",
-        icon: "error",
-        confirmButtonColor: "#d33",
-      });
+      if (error.response.status===402){
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Session expired. Please login again.",
+          confirmButtonColor: "#d33",
+        });
+        setOpen(false); 
+      } else {
+        console.error("Error adding sensor:", error);
+        setOpen(false); // Close the modal if you have a modal state
+        Swal.fire({
+          title: "Error",
+          text: "There was an error adding the sensor.",
+          icon: "error",
+          confirmButtonColor: "#d33",
+        });
+      }
     }
   };
 
@@ -137,19 +155,25 @@ export const AddSensor = ({ onSensorAdded }) => {
     const errors = {};
     if (!sensorName.length) errors.sensorName = "Sensor Name is required";
     if (!sensorType) errors.sensorType = "Sensor Type is required";
-    if (!sensorDescription) errors.sensorDescription = "Description is required";
+    if (!sensorDescription)
+      errors.sensorDescription = "Description is required";
     if (!minValue) errors.valueRange = "Min value is required";
     if (!maxValue) errors.valueRange = "Max value is required";
-    if (minValue >= maxValue) errors.valueRange = "Min value must be less than Max value";
+    if (minValue >= maxValue)
+      errors.valueRange = "Min value must be less than Max value";
     if (!unit) errors.unit = "Unit is required";
 
     return errors;
   };
-  
 
   return (
     <div>
-      <Button variant="contained" id="AddBtn" startIcon={<AddIcon />} onClick={handleOpen}>
+      <Button
+        variant="contained"
+        id="AddBtn"
+        startIcon={<AddIcon />}
+        onClick={handleOpen}
+      >
         Add Sensor
       </Button>
       <Modal
@@ -176,11 +200,14 @@ export const AddSensor = ({ onSensorAdded }) => {
                     onChange={(e) => setSensorName(e.target.value)}
                     fullWidth
                     error={!!errors.sensorName}
-                  helperText={errors.sensorName}
+                    helperText={errors.sensorName}
                   />
                 </Box>
 
-                <FormControl sx={{ m: 1, width: "50%" }} error={!!errors.sensorType}>
+                <FormControl
+                  sx={{ m: 1, width: "50%" }}
+                  error={!!errors.sensorType}
+                >
                   <InputLabel id="demo-multiple-name-label">Type</InputLabel>
                   <Select
                     labelId="demo-multiple-name-label"
@@ -197,7 +224,9 @@ export const AddSensor = ({ onSensorAdded }) => {
                       </MenuItem>
                     ))}
                   </Select>
-                  {errors.sensorType && <p className="add-sensor-error-text">{errors.sensorType}</p>}
+                  {errors.sensorType && (
+                    <p className="add-sensor-error-text">{errors.sensorType}</p>
+                  )}
                 </FormControl>
               </div>
               <div className="description">
@@ -246,7 +275,10 @@ export const AddSensor = ({ onSensorAdded }) => {
               </div>
               <div className="unitButtonContainer">
                 <div className="unit">
-                  <FormControl sx={{ m: 1, width: "100%" }} error={!!errors.unit}>
+                  <FormControl
+                    sx={{ m: 1, width: "100%" }}
+                    error={!!errors.unit}
+                  >
                     <InputLabel id="demo-multiple-name-label">Unit</InputLabel>
                     <Select
                       labelId="demo-multiple-name-label"
@@ -263,13 +295,28 @@ export const AddSensor = ({ onSensorAdded }) => {
                         </MenuItem>
                       ))}
                     </Select>
-                    {errors.unit && <p className="add-sensor-error-text">{errors.unit}</p>}
+                    {errors.unit && (
+                      <p className="add-sensor-error-text">{errors.unit}</p>
+                    )}
                   </FormControl>
                 </div>
                 <div className="buttonContainer">
                   <Stack direction="row" spacing={2}>
-                    <Button variant="outlined" sx={{ color: 'green', borderColor: 'green' }} onClick={cancelAdd}>Cancel</Button>
-                    <Button variant="contained" sx={{ bgcolor: 'green' }} endIcon={<AddIcon />} onClick={addSensor}>Save</Button>
+                    <Button
+                      variant="outlined"
+                      sx={{ color: "green", borderColor: "green" }}
+                      onClick={cancelAdd}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      variant="contained"
+                      sx={{ bgcolor: "green" }}
+                      endIcon={<AddIcon />}
+                      onClick={addSensor}
+                    >
+                      Save
+                    </Button>
                   </Stack>
                 </div>
               </div>
