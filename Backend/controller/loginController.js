@@ -12,7 +12,7 @@ const Login = async (req, res) => {
             return res.status(401).json({ error: "Wrong username or password" });
         }
 
-        // Compare the plain text passwords
+        // Compare the encrypted passwords
         if (userFromDB.password !== md5(password)) {
             return res.status(401).json({ error: "Wrong username or password" });
         }
