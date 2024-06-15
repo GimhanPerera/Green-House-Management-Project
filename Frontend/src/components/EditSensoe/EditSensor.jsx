@@ -136,7 +136,7 @@ const editSensor = async () => {
 
   return (
     <div>
-      <Button variant="contained" id="AddBtn" startIcon={<AddIcon />} onClick={handleOpen}>
+      <Button variant="contained" id="AddBtn" startIcon={<AddIcon />} onClick={handleOpen} sx={{position:'fixed', right:'40px', top:'100px' }}>
         Edit Sensor
       </Button>
       <Modal
