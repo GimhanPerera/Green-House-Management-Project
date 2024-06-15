@@ -1,26 +1,30 @@
 var nodemailer = require('nodemailer');
-const { alert, sensor } = require('../models');
+const { alert, sensor,user } = require('../models');
 require('dotenv').config();
 
 //controller to send alerts
-const sendAlert = async (email,sensorDetails) => {
-    
-    try{
-        const { sensorId, sensorName, upper_limit, lower_limit, value} = sensorDetails;
-        //create transport using nodemailer
-        var transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-               user: process.env.EMAIL,
-               pass: process.env.PASSWORD
-            }
-        });
-        // structuring the email
-        var mailOptions = {
-            from: process.env.EMAIL,
-            to: email,
-            subject: "Sensor Alert",
-            html: `<!DOCTYPE html>
+const sendAlert = async (userId, sensorDetails) => {
+
+  try {
+    //const { email, sensorDetails } = req.body;
+    const { sensorId, sensorName, upper_limit, lower_limit, value } = sensorDetails;
+    //create transport using nodemailer
+    const user1 = await user.findOne({ where: { userId } });
+    console.log("EMAIL ",user1.email," ",sensorName)
+    const email = user1.email;
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.PASSWORD
+      }
+    });
+    // structuring the email
+    var mailOptions = {
+      from: process.env.EMAIL,
+      to: email,
+      subject: "Sensor Alert",
+      html: `<!DOCTYPE html>
             <html lang="en">
             <head>
               <meta charset="UTF-8">
@@ -130,10 +134,9 @@ const sendAlert = async (email,sensorDetails) => {
     //send trasporter to send the email
     transporter.sendMail(mailOptions, function (error, info) {
       if (error) {
-        res.status(500).json({ status: 500, error });
-        console.log(error);
+        return "error"
       } else {
-        res.status(200).json({ status: 200, message: "Email sent" });
+        return "error"
       }
     });
     //update the database
@@ -145,7 +148,7 @@ const sendAlert = async (email,sensorDetails) => {
 
   } catch (error) {
     console.log(error)
-    res.status(500).json({ status: 500, message: "Internal server error" });
+    return "Internal server error"
   }
 }
 
@@ -167,10 +170,10 @@ const getAllAlertDataOfUser = async (req, res) => {
       },
     });
     
-    res.status(200).json(alertList);
+    return "Success";
   } catch (error) {
     console.error(error)
-    res.status(400).json("Server error");
+    return "Server error";
   }
 }
 

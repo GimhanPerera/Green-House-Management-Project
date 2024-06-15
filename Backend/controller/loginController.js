@@ -52,5 +52,4 @@ const getUserName = async (req, res) => {
 module.exports = getUserName;
 
 
-
 module.exports = { Login, getUserName };
