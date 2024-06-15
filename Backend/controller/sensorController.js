@@ -98,8 +98,19 @@ const receiveSensorData = async (req, res) => {
 const editSensor = async (req, res) => {
     try {
         
-
-        res.status(201).json("Test");
+        const editSensor = await sensor.findByPk(req.body.sensorId);
+        // Check if the sensor exists
+        if (!editSensor) {
+            console.log("ID not found: ", req.body.sensorId)
+            return res.status(404).json({ error: "Sensor not found" });
+        }
+        editSensor.sensorName = req.body.sensorName;
+        editSensor.description = req.body.description;
+        editSensor.upper_limit=req.body.upper_limit;
+        editSensor.lower_limit=req.body.lower_limit;
+        editSensor.unit = req.body.unit;
+        await editSensor.save();
+        res.status(201).json("Updated");
     } catch (error) {
         console.error('Error adding sensor:', error);
         res.status(500).json({ message: 'There was an error adding the sensor.' });
