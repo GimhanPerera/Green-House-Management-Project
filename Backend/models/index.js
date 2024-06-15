@@ -57,4 +57,3 @@ db.alert.belongsTo(db.sensor);
 //1:m sensor history
 db.sensor.hasMany(db.history);
 db.history.belongsTo(db.sensor);
-

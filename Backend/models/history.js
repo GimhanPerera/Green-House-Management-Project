@@ -1,28 +1,28 @@
 module.exports = (sequelize, DataTypes) => {
 
-    const history = sequelize.define('history', {
-       
-        historyId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            primaryKey: true,
-        },
+  const history = sequelize.define('history', {
+     
+      historyId: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+          primaryKey: true,
+      },
 
-        dateTime:{
-            type:DataTypes.DATE,
-        },
+      dateTime:{
+          type:DataTypes.DATE,
+      },
 
-        measurement: {
-            type: DataTypes.FLOAT,
-        },
+      measurement: {
+          type: DataTypes.FLOAT,
+      },
 
-        status: {
-            type: DataTypes.STRING,
-        },
+      status: {
+          type: DataTypes.STRING,
+      },
 
-    },{
-        timestamps: false
-    });
+  },{
+      timestamps: false
+  });
 
-    return history;
+  return history;
 }

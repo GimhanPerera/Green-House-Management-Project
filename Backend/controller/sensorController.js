@@ -79,10 +79,21 @@ const editSensor = async (req, res) => {
     }
 }
 
+const editSensor = async (req, res) => {
+    try {
+        
+
+        res.status(201).json("Test");
+    } catch (error) {
+        console.error('Error adding sensor:', error);
+        res.status(500).json({ message: 'There was an error adding the sensor.' });
+    }
+}
 
 module.exports = {
     getSensorHistoryById,
     getAllSensorDataOfUser,
     addSensor,
+    receiveSensorData,
     editSensor
 }
