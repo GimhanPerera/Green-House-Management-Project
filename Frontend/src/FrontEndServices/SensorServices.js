@@ -313,7 +313,7 @@ const sensorTypeDescriptions = [
       "Soil pH sensors are used to measure the acidity or alkalinity of soil. They are used in agriculture, horticulture, and other applications where soil pH needs to be monitored.",
   },
   {
-    type: "CO2 Level",
+    type: "CO2",
     image:
       "https://cdn.shopify.com/s/files/1/0019/5952/files/what_co2_level_is_dangerous.png?v=1678825571",
     description:

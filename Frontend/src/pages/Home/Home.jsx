@@ -20,10 +20,11 @@ import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { styled, useTheme } from "@mui/material/styles";
-import axios from 'axios';
+import axios from "axios";
 import * as React from "react";
-import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
+import { useNavigate } from 'react-router-dom'; 
 import "./Home.css";
 
 const drawerWidth = 240;
@@ -97,7 +98,25 @@ export const Home = () => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [selectedItem, setSelectedItem] = React.useState("Dashboard");
-  const [user, setUser] = React.useState("Gimhan");
+  const [user, setUser] = React.useState("User");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Fetch user details from the backend when the page loads
+    const accessToken = localStorage.getItem("accessToken");
+    axios
+      .get(`http://localhost:3001/api/user/getUserName`, {
+        headers: {
+          "access-token": accessToken,
+        },
+      })
+      .then((response) => {
+        setUser(response.data.f_name);
+      })
+      .catch((error) => {
+        console.error("There was an error fetching the user details!", error);
+      });
+  }, []);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -107,9 +126,8 @@ export const Home = () => {
     setOpen(false);
   };
 
-
   //===============for get user details====================
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
   const [user2, setUser2] = useState(null);
 
   const handleInputChange = (event) => {
@@ -122,24 +140,29 @@ export const Home = () => {
   const handleSubmit = () => {
     console.log("Input Value:", inputValue);
     // Fetch user details from the backend when the submit button is clicked
-    axios.get(`http://localhost:3001/api/green/profile/${inputValue}`)
-      .then(response => {
+    axios
+      .get(`http://localhost:3001/api/green/profile/${inputValue}`)
+      .then((response) => {
         console.log(response.data);
         setUser2(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("There was an error fetching the user details!", error);
       });
   };
   //=======================================================
+const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    navigate("/");
+};
+
 
   return (
-
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         {/* Navigation bar TOP */}
-        <Toolbar className="toolbar" >
+        <Toolbar className="toolbar">
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -154,10 +177,8 @@ export const Home = () => {
           </IconButton>
           <Typography variant="h3" noWrap component="div" id="Heading">
             <div>Green</div>
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <div
-                className="userIconName"
-              >
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              <div className="userIconName">
                 <AccountCircleIcon
                   style={{ fontSize: "2.5rem", marginLeft: "10px" }}
                 />
@@ -182,7 +203,6 @@ export const Home = () => {
         </DrawerHeader>
         <Divider />
         <List className="navList">
-
           {/* Dashboard Button */}
           <NavLink to="">
             <ListItem
@@ -217,15 +237,15 @@ export const Home = () => {
             </ListItem>
           </NavLink>
 
-          {/* Sensor list Button */}
-          <NavLink to="sensors">
+          {/* Alert button Button */}
+          <NavLink to="alerts">
             <ListItem
               disablePadding
               sx={{
                 display: "block",
-                backgroundColor: selectedItem === "Sensor list" ? "#14b82d" : "",
+                backgroundColor: selectedItem === "Alerts" ? "#14b82d" : "",
               }}
-              onClick={() => setSelectedItem("Sensor list")}
+              onClick={() => setSelectedItem("Alerts")}
             >
               <ListItemButton
                 sx={{
@@ -242,92 +262,55 @@ export const Home = () => {
                   }}
                 >
                   {" "}
-                  <SensorsIcon className="listIcon" />
+                  <AddAlertIcon className="listIcon" />
                 </ListItemIcon>
                 <ListItemText sx={{ opacity: open ? 1 : 0 }}>
-                  <p className="listItemText">Sensor list</p>
+                  <p className="listItemText">Alerts</p>
                 </ListItemText>
               </ListItemButton>
             </ListItem>
           </NavLink>
 
-          {/* History button Button */}
-          <NavLink to="history">
-          <ListItem
-            disablePadding
-            sx={{
-              display: "block",
-              groundColor: selectedItem === "History" ? "#14b82d" : "",
-            }}
-            onClick={() => setSelectedItem("History")}
-          >
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                {" "}
-                <HistoryIcon className="listIcon" />
-              </ListItemIcon>
-              <ListItemText sx={{ opacity: open ? 1 : 0 }}>
-                <p className="listItemText">History</p>
-              </ListItemText>
-            </ListItemButton>
-          </ListItem>
-          </NavLink>
-
-          {/* Alert button Button */}
-          <NavLink to="alerts">
-          <ListItem
-            disablePadding
-            sx={{
-              display: "block",
-              backgroundColor: selectedItem === "Alerts" ? "#14b82d" : "",
-            }}
-            onClick={() => setSelectedItem("Alerts")}
-          >
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                {" "}
-                <AddAlertIcon className="listIcon" />
-              </ListItemIcon>
-              <ListItemText sx={{ opacity: open ? 1 : 0 }}>
-                <p className="listItemText">Alerts</p>
-              </ListItemText>
-            </ListItemButton>
-          </ListItem>
-          </NavLink>
-
           {/* Profile button */}
           <NavLink to="profile">
+            <ListItem
+              disablePadding
+              sx={{
+                display: "block",
+                backgroundColor: selectedItem === "Profile" ? "#14b82d" : "",
+              }}
+              onClick={() => setSelectedItem("Profile")}
+            >
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  {" "}
+                  <AccountCircleIcon className="listIcon" />
+                </ListItemIcon>
+                <ListItemText sx={{ opacity: open ? 1 : 0 }}>
+                  <p className="listItemText">Profile</p>
+                </ListItemText>
+              </ListItemButton>
+            </ListItem>
+          </NavLink>
+          
           <ListItem
             disablePadding
             sx={{
               display: "block",
-              backgroundColor: selectedItem === "Profile" ? "#14b82d" : "",
             }}
-            onClick={() => setSelectedItem("Profile")}
+            onClick={handleLogout}
           >
             <ListItemButton
               sx={{
@@ -344,17 +327,15 @@ export const Home = () => {
                 }}
               >
                 {" "}
-                <AccountCircleIcon className="listIcon" />
+                <SensorsIcon className="listIcon" />
               </ListItemIcon>
               <ListItemText sx={{ opacity: open ? 1 : 0 }}>
-                <p className="listItemText">Profile</p>
+                <p className="listItemText">Log Out</p>
               </ListItemText>
             </ListItemButton>
           </ListItem>
-          </NavLink>
         </List>
       </Drawer>
-
     </Box>
   );
 };

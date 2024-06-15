@@ -34,7 +34,8 @@ const getAllSensorDataOfUser = async (req, res) => {
 
 const addSensor = async (req, res) => {
     try {
-        const { sensorName, type, description, sensorStatus, upper_limit, lower_limit, lastUpdate, unit, userUserId } = req.body;
+        const { sensorName, type, description, sensorStatus, upper_limit, lower_limit, lastUpdate, unit } = req.body;
+        const userUserId = req.userId;
 
         const newSensor = await sensor.create({
             sensorName,
@@ -83,13 +84,19 @@ const receiveSensorData = async (req, res) => {
             }
             console.log("Upper")
             const answer = sendAlert(userId,sensorDetails)
-            return res.status(200).json(answer);
+            return res.status(200).json(sensorDetails);
         }
-        //
-        const user = await user.findByPk(sensor1.userUserId);
-        //USER EMAIL = user.email
-        //SENSOR UPPER LIMIT = sensor1.upper_limit
-        //SENSOR LOWER LIMIT = sensor1.lower_limit
+        
+        if (measurement < sensor1.lower_limit) {
+            const newHistory = await history.create({
+                dateTime: new Date(),
+                measurement,
+                status: 'Low',
+                sensorSensorId: sensorId
+            });
+          const answer = sendAlert(userId,sensorDetails)
+            return res.status(201).json(newHistory);
+        }
 
         // Get the current max historyId
         const lastHistory = await history.findOne({
