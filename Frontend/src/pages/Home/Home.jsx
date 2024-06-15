@@ -286,6 +286,7 @@ export const Home = () => {
           </NavLink>
 
           {/* Alert button Button */}
+          <NavLink to="alerts">
           <ListItem
             disablePadding
             sx={{
@@ -316,6 +317,7 @@ export const Home = () => {
               </ListItemText>
             </ListItemButton>
           </ListItem>
+          </NavLink>
 
           {/* Profile button */}
           <ListItem
