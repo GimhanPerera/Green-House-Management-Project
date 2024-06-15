@@ -3,10 +3,9 @@ const { alert } = require('../models');
 require('dotenv').config();
 
 //controller to send alerts
-const sendAlert = async (req, res) => {
+const sendAlert = async (email,sensorDetails) => {
     
     try{
-        const {email, sensorDetails} = req.body;
         const { sensorId, sensorName, upper_limit, lower_limit, value} = sensorDetails;
         //create transport using nodemailer
         var transporter = nodemailer.createTransport({

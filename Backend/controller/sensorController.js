@@ -1,5 +1,6 @@
 const { history, sensor } = require('../models');
 const {validateToken} = require('../JWT');
+const {sendAlert} = require('./alertController');
 
 const getSensorHistoryById = async (req, res) => {
     try {
@@ -33,7 +34,8 @@ const getAllSensorDataOfUser = async (req, res) => {
 
 const addSensor = async (req, res) => {
     try {
-        const { sensorName, type, description, sensorStatus, upper_limit, lower_limit, lastUpdate, unit, userUserId } = req.body;
+        const { sensorName, type, description, sensorStatus, upper_limit, lower_limit, lastUpdate, unit } = req.body;
+        const userUserId = req.userId;
 
         const newSensor = await sensor.create({
             sensorName,
@@ -61,6 +63,26 @@ const receiveSensorData = async (req, res) => {
         const sensor1 = await sensor.findByPk(sensorId);
         if (!sensor1) {
             return res.status(404).json({ message: 'Sensor not found' });
+        }
+        if (measurement > sensor1.upper_limit ) {
+            const newHistory = await history.create({
+                dateTime: new Date(),
+                measurement,
+                status: 'High',
+                sensorSensorId: sensorId
+            });
+            //sendAlert(email,sensorDetails)
+            return res.status(201).json(newHistory);
+        }
+        if (measurement < sensor1.lower_limit) {
+            const newHistory = await history.create({
+                dateTime: new Date(),
+                measurement,
+                status: 'Low',
+                sensorSensorId: sensorId
+            });
+            //sendAlert(email,sensorDetails)
+            return res.status(201).json(newHistory);
         }
 
         // Get the current max historyId

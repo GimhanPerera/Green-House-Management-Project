@@ -16,7 +16,12 @@ export const Profile = () => {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/api/green/profile/2');
+                const accessToken = localStorage.getItem("accessToken");
+                const response = await axios.get('http://localhost:3001/api/green/profile', {
+                    headers: {
+                        "access-token": accessToken,
+                    },
+                });
                 const data = response.data;
                 setProfile({
                     firstName: data.f_name,
@@ -24,8 +29,25 @@ export const Profile = () => {
                     email: data.email
                 });
             } catch (error) {
-                console.error("Error fetching profile:", error);
-            }
+                if (error.response.status===402){
+                  Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Session expired. Please login again.",
+                    confirmButtonColor: "#d33",
+                  });
+                  setOpen(false); 
+                } else {
+                  console.error("Error adding sensor:", error);
+                  setOpen(false);
+                  Swal.fire({
+                    title: "Error",
+                    text: "Error fetching profile",
+                    icon: "error",
+                    confirmButtonColor: "#d33",
+                  });
+                }
+              }
         };
 
         fetchProfile();
@@ -49,15 +71,38 @@ export const Profile = () => {
                 l_name: profile.lastName,
                 email: profile.email
             };
-            await axios.put('http://localhost:3001/api/green/profile/2', updatedProfile);
-            Swal.fire({
-                title: "Profile updated successfully!",
-                icon: "success",
-                confirmButtonText: "OK",
+            await axios.put('http://localhost:3001/api/green/profile', updatedProfile, {
+                headers: {
+                    "access-token": localStorage.getItem("accessToken"),
+                },
             });
-        } catch (error) {
-            console.error("Error updating profile:", error);
-        }
+            Swal.fire({
+                title: "Success",
+                text: "Profile updated successfully",
+                icon: "success",
+                confirmButtonColor: "#d33",
+            });
+        }catch (error) {
+            if (error.response.status===402){
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Session expired. Please login again.",
+                confirmButtonColor: "#d33",
+              });
+              setOpen(false); 
+            } else {
+              console.error("Error updating profile:", error);
+              setOpen(false);
+              Swal.fire({
+                title: "Error",
+                text: "Error updating profile",
+                icon: "error",
+                confirmButtonColor: "#d33",
+              });
+            }
+          }
+
     };
 
     return (
