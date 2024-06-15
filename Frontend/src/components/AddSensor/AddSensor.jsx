@@ -111,7 +111,6 @@ export const AddSensor = ({ onSensorAdded }) => {
           lower_limit: minValue,
           lastUpdate: null,
           unit: unit,
-          userUserId: "1",
         },
         {
           headers: {

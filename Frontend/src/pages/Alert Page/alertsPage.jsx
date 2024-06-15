@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Button, Container } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { DataGrid } from '@mui/x-data-grid';
-import { ToastContainer, toast } from 'react-toastify';
+import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // Styled DataGrid component
@@ -47,14 +48,46 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
 
 const AlertPage = () => {
   const [alerts, setAlerts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    axios
+      .get('http://localhost:3001/api/alert/getData', {
+        headers: {
+          "access-token": accessToken,
+        },
+      })
+      .then((response) => {
+        // Format date-time strings
+        const formattedRows = response.data.map((entry) => ({
+          ...entry,
+          dateTime: new Date(entry.dateTime).toLocaleString("en-US", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          }),
+        }));
+        setAlerts(formattedRows);
+        console.log(formattedRows);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+      });
+  }, []);
 
   const columns = [
     { field: 'alertId', headerName: 'Alert ID', width: 100 },
     { field: 'alert', headerName: 'Alert', width: 200 },
-    { field: 'alertDateTime', headerName: 'Alert Date & Time', width: 200 },
-    { field: 'value', headerName: 'Value', width: 100 },
+    { field: 'dateTime', headerName: 'Alert Date & Time', width: 200 },
+    { field: 'sensorSensorId', headerName: 'Sensor Id', width: 100 },
   ];
 
+  if(loading) return null;
   return (
     <>
       <Box component="div" sx={{}}>
@@ -67,7 +100,7 @@ const AlertPage = () => {
             sx={{ border: '1px solid gray', width: '700px', margin: 'auto' }}
             rows={alerts}
             columns={columns}
-            getRowId={(row) => row.alertId}
+            getRowId={(alerts) => alerts.alertId}
           />
         </Box>
       </Container>

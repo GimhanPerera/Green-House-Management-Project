@@ -1,4 +1,3 @@
-
 const { user } = require('../models');
 const { createToken } = require('../JWT');
 const md5 = require('md5');

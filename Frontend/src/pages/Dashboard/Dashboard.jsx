@@ -6,10 +6,10 @@ import Typography from "@mui/material/Typography";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
+import Swal from "sweetalert2";
 import { getImageLink } from "../../FrontEndServices/SensorServices";
 import { AddSensor } from "../../components/AddSensor/AddSensor";
 import "./Dashboard.css";
-import Swal from "sweetalert2";
 
 export const Dashboard = () => {
   const spacing = 2;
@@ -23,6 +23,7 @@ export const Dashboard = () => {
     const id = '1'; // User ID should be here
     const accessToken = localStorage.getItem("accessToken"); // Get the token from local storage
     try {
+      console.log("accessToken",accessToken)
       const response = await axios.get(`http://localhost:3001/api/sensors/sensorDataByUserId`, {
         headers: {
           "access-token": accessToken,

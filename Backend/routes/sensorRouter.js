@@ -23,4 +23,5 @@ router.post("/alert", alertController.sendAlert)
 
 router.post("/receiveData", sensorController.receiveSensorData)
 
+
 module.exports = router;
