@@ -38,6 +38,7 @@ export const AddSensor = ({ onSensorAdded }) => {
   const [minValue, setMinValue] = useState(0);
   const [unit, setUnit] = useState("");
   const [unitOptions, setUnitOptions] = useState([]);
+  const [errors, setErrors] = useState({});
 
   const sensorTypes = [
     "Temperature",
@@ -86,10 +87,18 @@ export const AddSensor = ({ onSensorAdded }) => {
     setMaxValue(0);
     setMinValue(0);
     setUnit("");
+    setErrors({}); // Clear errors when canceling
   };
 
   // Add a function to add a sensor
   const addSensor = async () => {
+
+    const errors = validateInputs();
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);  
+      return;
+    }
+
     try {
       const response = await axios.post("http://localhost:3001/api/sensors/add", {
         sensorName: sensorName,
@@ -123,6 +132,19 @@ export const AddSensor = ({ onSensorAdded }) => {
       });
     }
   };
+
+  const validateInputs = () => {
+    const errors = {};
+    if (!sensorName.length) errors.sensorName = "Sensor Name is required";
+    if (!sensorType) errors.sensorType = "Sensor Type is required";
+    if (!sensorDescription) errors.sensorDescription = "Description is required";
+    if (!minValue) errors.valueRange = "Min value is required";
+    if (!maxValue) errors.valueRange = "Max value is required";
+    if (minValue >= maxValue) errors.valueRange = "Min value must be less than Max value";
+    if (!unit) errors.unit = "Unit is required";
+
+    return errors;
+  };
   
 
   return (
@@ -153,10 +175,12 @@ export const AddSensor = ({ onSensorAdded }) => {
                     variant="outlined"
                     onChange={(e) => setSensorName(e.target.value)}
                     fullWidth
+                    error={!!errors.sensorName}
+                  helperText={errors.sensorName}
                   />
                 </Box>
 
-                <FormControl sx={{ m: 1, width: "50%" }}>
+                <FormControl sx={{ m: 1, width: "50%" }} error={!!errors.sensorType}>
                   <InputLabel id="demo-multiple-name-label">Type</InputLabel>
                   <Select
                     labelId="demo-multiple-name-label"
@@ -173,6 +197,7 @@ export const AddSensor = ({ onSensorAdded }) => {
                       </MenuItem>
                     ))}
                   </Select>
+                  {errors.sensorType && <p className="add-sensor-error-text">{errors.sensorType}</p>}
                 </FormControl>
               </div>
               <div className="description">
@@ -186,6 +211,8 @@ export const AddSensor = ({ onSensorAdded }) => {
                   onChange={(e) => setSensorDescription(e.target.value)}
                   fullWidth
                   style={{ width: "98%" }}
+                  error={!!errors.sensorDescription}
+                  helperText={errors.sensorDescription}
                 />
               </div>
               <div className="sensorRange">
@@ -198,6 +225,8 @@ export const AddSensor = ({ onSensorAdded }) => {
                     variant="outlined"
                     onChange={(e) => setMinValue(e.target.value)}
                     fullWidth
+                    error={!!errors.valueRange}
+                    helperText={errors.valueRange}
                   />
                 </Box>
 
@@ -210,12 +239,14 @@ export const AddSensor = ({ onSensorAdded }) => {
                     variant="outlined"
                     onChange={(e) => setMaxValue(e.target.value)}
                     fullWidth
+                    error={!!errors.valueRange}
+                    helperText={errors.valueRange}
                   />
                 </Box>
               </div>
               <div className="unitButtonContainer">
                 <div className="unit">
-                  <FormControl sx={{ m: 1, width: "100%" }}>
+                  <FormControl sx={{ m: 1, width: "100%" }} error={!!errors.unit}>
                     <InputLabel id="demo-multiple-name-label">Unit</InputLabel>
                     <Select
                       labelId="demo-multiple-name-label"
@@ -232,6 +263,7 @@ export const AddSensor = ({ onSensorAdded }) => {
                         </MenuItem>
                       ))}
                     </Select>
+                    {errors.unit && <p className="add-sensor-error-text">{errors.unit}</p>}
                   </FormControl>
                 </div>
                 <div className="buttonContainer">
