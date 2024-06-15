@@ -40,6 +40,7 @@ export const EditSensor = ({ sensorData }) => {
   const [unit, setUnit] = useState(sensorData.unit);
   const [unitOptions, setUnitOptions] = useState([]);
   const { state } = useLocation();
+  const [errors, setErrors] = useState({});
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -80,9 +81,26 @@ export const EditSensor = ({ sensorData }) => {
     setMaxValue(0);
     setMinValue(0);
     setUnit("");
+    setErrors({});
+  };
+
+  // Validations
+  const validate = () => {
+    const newErrors = {};
+    if (!sensorName) newErrors.sensorName = 'Sensor Name is required';
+    if (!sensorDescription) newErrors.sensorDescription = 'Description is required';
+    if (minValue === '') newErrors.minValue = 'Min Value is required';
+    if (maxValue === '') newErrors.maxValue = 'Max Value is required';
+    if (minValue >= maxValue) newErrors.minValue = 'Min Value must be less than Max Value';
+    if (maxValue <= minValue) newErrors.maxValue = 'Max Value must be greater than Min Value';
+    if (!unit) newErrors.unit = 'Unit is required';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
 const editSensor = async () => {
+  if (!validate()) return;
+
     try {
         const response = await axios.post("http://localhost:3001/api/sensors/edit", {
             sensorId: sensorId,
@@ -157,6 +175,8 @@ const editSensor = async () => {
                     value={sensorName}
                     onChange={(e) => setSensorName(e.target.value)}
                     fullWidth
+                    error={!!errors.sensorName} 
+                    helperText={errors.sensorName}
                   />
                 </Box>
 
@@ -173,6 +193,8 @@ const editSensor = async () => {
                   onChange={(e) => setSensorDescription(e.target.value)}
                   fullWidth
                   style={{ width: "98%" }}
+                  error={!!errors.sensorDescription} 
+                  helperText={errors.sensorDescription}
                 />
               </div>
               <div className="sensorRange">
@@ -186,6 +208,8 @@ const editSensor = async () => {
                     value={minValue}
                     onChange={(e) => setMinValue(e.target.value)}
                     fullWidth
+                    error={!!errors.minValue} 
+                    helperText={errors.minValue}
                   />
                 </Box>
 
@@ -199,6 +223,8 @@ const editSensor = async () => {
                     variant="outlined"
                     onChange={(e) => setMaxValue(e.target.value)}
                     fullWidth
+                    error={!!errors.maxValue} 
+                    helperText={errors.maxValue}
                   />
                 </Box>
               </div>
@@ -214,6 +240,7 @@ const editSensor = async () => {
                       input={<OutlinedInput label="Name" />}
                       MenuProps={MenuProps}
                       fullWidth
+                      error={!!errors.unit}
                     >
                       {unitOptions.map((unit) => (
                         <MenuItem key={unit} value={unit}>
@@ -221,6 +248,9 @@ const editSensor = async () => {
                         </MenuItem>
                       ))}
                     </Select>
+                    {errors.unit && (
+                      <small style={{ color: 'red' }}>{errors.unit}</small>
+                    )}
                   </FormControl>
                 </div>
                 <div className="buttonContainer">
