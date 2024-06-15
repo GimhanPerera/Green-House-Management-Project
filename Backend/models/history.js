@@ -3,10 +3,9 @@ module.exports = (sequelize, DataTypes) => {
     const history = sequelize.define('history', {
        
         historyId: {
-            type: DataTypes.STRING(10),
+            type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
-            defaultValue: '0',
         },
 
         dateTime:{
@@ -21,6 +20,8 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
         },
 
+    },{
+        timestamps: false
     });
 
     return history;
