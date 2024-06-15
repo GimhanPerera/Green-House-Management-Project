@@ -6,6 +6,7 @@ import { History } from './pages/History/History';
 import { Sensor } from './pages/Sensor/Sensor';
 import { LoginPage } from './pages/loginPage';
 import ManagementSystem from './pages/managementSystem';
+import RegistrationPage from './pages/Registration Page/registrationPage';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
               {/* New routes add to here */}
             </Route>
             <Route path="home" element={<SideBar />} />
+            <Route path="registration" element={<RegistrationPage />} />
           </Route>
         </Routes>
         <Outlet />
