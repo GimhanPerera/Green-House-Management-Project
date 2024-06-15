@@ -1,6 +1,7 @@
 
 const { user } = require('../models');
 const { createToken } = require('../JWT');
+const md5 = require('md5');
 
 const Login = async (req, res) => {
     try {
@@ -13,7 +14,7 @@ const Login = async (req, res) => {
         }
 
         // Compare the plain text passwords
-        if (userFromDB.password !== password) {
+        if (userFromDB.password !== md5(password)) {
             return res.status(401).json({ error: "Wrong username or password" });
         }
         const accessToken = createToken(userFromDB.userId);
