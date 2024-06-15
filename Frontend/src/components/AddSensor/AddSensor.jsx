@@ -1,20 +1,21 @@
-import * as React from "react";
-import { useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import { styled, css } from "@mui/system";
 import { Modal as BaseModal } from "@mui/base/Modal";
-import Fade from "@mui/material/Fade";
-import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import OutlinedInput from "@mui/material/OutlinedInput";
+import Button from "@mui/material/Button";
+import Fade from "@mui/material/Fade";
+import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
+import OutlinedInput from "@mui/material/OutlinedInput";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
-import Swal from 'sweetalert2'
+import TextField from "@mui/material/TextField";
+import { css, styled } from "@mui/system";
+import axios from "axios";
+import PropTypes from "prop-types";
+import * as React from "react";
+import { useEffect, useState } from "react";
+import Swal from 'sweetalert2';
 import "./AddSensor.css";
 
 const ITEM_HEIGHT = 48;
@@ -28,7 +29,7 @@ const MenuProps = {
   },
 };
 
-export const AddSensor = () => {
+export const AddSensor = ({ onSensorAdded }) => {
   const [open, setOpen] = React.useState(false);
   const [sensorName, setSensorName] = useState([]);
   const [sensorType, setSensorType] = useState("");
@@ -76,8 +77,8 @@ export const AddSensor = () => {
     const value = event.target.value;
     setUnit(value);
   };
-    // Add a function to cancel adding a sensor
-    const cancelAdd = () => {
+  // Add a function to cancel adding a sensor
+  const cancelAdd = () => {
     setOpen(false);
     setSensorName("");
     setSensorType("");
@@ -85,18 +86,44 @@ export const AddSensor = () => {
     setMaxValue(0);
     setMinValue(0);
     setUnit("");
-    };
+  };
 
-    // Add a function to add a sensor
-    const addSensor = () => {
-            setOpen(false);
-        Swal.fire({
-            title: "Good job!",
-            text: "Sensor added successfully!",
-            icon: "success",
-            confirmButtonColor: "#017148",
-          });
-        };
+  // Add a function to add a sensor
+  const addSensor = async () => {
+    try {
+      const response = await axios.post("http://localhost:3001/api/sensors/add", {
+        sensorName: sensorName,
+        type: sensorType,
+        description: sensorDescription,
+        sensorStatus: 'Ok',
+        upper_limit: maxValue,
+        lower_limit: minValue,
+        lastUpdate: null,
+        unit: unit,
+        userUserId: '1'
+      });
+  
+      Swal.fire({
+        title: "Good job!",
+        text: "Sensor added successfully!",
+        icon: "success",
+        confirmButtonColor: "#017148",
+      });
+  
+      setOpen(false); // Close the modal if you have a modal state
+      onSensorAdded(); // Call the callback function to refresh the sensor list
+    } catch (error) {
+      console.error('Error adding sensor:', error);
+      setOpen(false); // Close the modal if you have a modal state
+      Swal.fire({
+        title: "Error",
+        text: "There was an error adding the sensor.",
+        icon: "error",
+        confirmButtonColor: "#d33",
+      });
+    }
+  };
+  
 
   return (
     <div>
@@ -156,7 +183,7 @@ export const AddSensor = () => {
                   rows={3}
                   defaultValue=""
                   variant="outlined"
-                    onChange={(e) => setSensorDescription(e.target.value)}
+                  onChange={(e) => setSensorDescription(e.target.value)}
                   fullWidth
                   style={{ width: "98%" }}
                 />
@@ -210,7 +237,7 @@ export const AddSensor = () => {
                 <div className="buttonContainer">
                   <Stack direction="row" spacing={2}>
                     <Button variant="outlined" sx={{ color: 'green', borderColor: 'green' }} onClick={cancelAdd}>Cancel</Button>
-                    <Button variant="contained" sx={{bgcolor:'green'}} endIcon={<AddIcon />} onClick={addSensor}>Save</Button>
+                    <Button variant="contained" sx={{ bgcolor: 'green' }} endIcon={<AddIcon />} onClick={addSensor}>Save</Button>
                   </Stack>
                 </div>
               </div>

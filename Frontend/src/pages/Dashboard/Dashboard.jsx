@@ -16,26 +16,26 @@ export const Dashboard = () => {
   const [sensors, setSensors] = useState([]);
   const navigate = useNavigate(); // Create a navigate function
 
-  // useEffect is a hook that runs after the first render and every time the component updates
-  //to fetch the sensors from the backend which are related to the user
+  const fetchSensors = async () => {
+    setLoading(true);
+    const id = 'User_id'; // User ID should be here
+    try {
+      const response = await axios.get(`http://localhost:3001/api/sensors/sensorDataByUserId/${id}`);
+      setSensors(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
-    //setSensors(getSensors());
-    const id = 'User_id'; //User ID should be here
-    axios.get(`http://localhost:3001/api/sensors/sensorDataByUserId/${id}`)
-          .then((response) => {
-              setSensors(response.data);
-              setLoading(false);
-          })
-          .catch(error => {
-              console.error(error);
-              setLoading(false);
-          });
+    fetchSensors();
   }, []);
 
   return (
     <div style={{ marginTop: "1rem" }}>
       <div className="addSensorContainer">
-        <AddSensor />
+        <AddSensor onSensorAdded={fetchSensors}/>
       </div>
       <Grid sx={{ flexGrow: 1 }} spacing={2}>
         <Grid item xs={12}>
@@ -43,7 +43,7 @@ export const Dashboard = () => {
             {sensors.map((sensor) => (
               <Grid key={sensor.id} item>
                 <Card
-                  sx={{ maxWidth: 311 }}
+                  sx={{ width: 311, minHeight:340 }}
                   className="sensorCard"
                   onClick={() => navigate(`./sensor/${sensor.sensorId}`, { state: { sensor } })}
                 >
@@ -54,7 +54,7 @@ export const Dashboard = () => {
                   />
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
-                      {sensor.name}
+                      {sensor.sensorName}
                     </Typography>
                     <Typography gutterBottom variant="h6" component="div">
                       {sensor.type}
@@ -86,7 +86,7 @@ export const Dashboard = () => {
                               variant="h4"
                               component="div"
                             >
-                              {sensor.lastUpdate}
+                              {sensor.lastUpdate ? sensor.lastUpdate: '-'}
                             </Typography>
                             {sensor.unit}
                           </div>
