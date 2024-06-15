@@ -22,7 +22,7 @@ import Typography from "@mui/material/Typography";
 import { styled, useTheme } from "@mui/material/styles";
 import axios from 'axios';
 import * as React from "react";
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import "./Home.css";
 
@@ -98,6 +98,20 @@ export const Home = () => {
   const [open, setOpen] = React.useState(false);
   const [selectedItem, setSelectedItem] = React.useState("Dashboard");
   const [user, setUser] = React.useState("Gimhan");
+
+  useEffect(() => {
+    // Fetch user details from the backend when the page loads
+    const accessToken = localStorage.getItem("accessToken");
+    axios.get(`http://localhost:3001/api/user/getUserName`, {
+      headers: {
+        "access-token": accessToken,
+      },
+    }).then(response => {
+      setUser(response.data.f_name);
+    }).catch(error => {
+      console.error("There was an error fetching the user details!", error);
+    });
+  }, []);
 
   const handleDrawerOpen = () => {
     setOpen(true);
