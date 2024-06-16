@@ -31,11 +31,11 @@ const MenuProps = {
 
 export const AddSensor = ({ onSensorAdded }) => {
   const [open, setOpen] = React.useState(false);
-  const [sensorName, setSensorName] = useState([]);
+  const [sensorName, setSensorName] = useState("");
   const [sensorType, setSensorType] = useState("");
   const [sensorDescription, setSensorDescription] = useState("");
-  const [maxValue, setMaxValue] = useState(0);
-  const [minValue, setMinValue] = useState(0);
+  const [maxValue, setMaxValue] = useState("");
+  const [minValue, setMinValue] = useState("");
   const [unit, setUnit] = useState("");
   const [unitOptions, setUnitOptions] = useState([]);
   const [errors, setErrors] = useState({});
@@ -50,6 +50,7 @@ export const AddSensor = ({ onSensorAdded }) => {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
   const tempUnits = ["°C", "°F"];
   const humidityUnits = ["%"];
   const co2Units = ["ppm"];
@@ -59,7 +60,27 @@ export const AddSensor = ({ onSensorAdded }) => {
   const handleChange = (event) => {
     const value = event.target.value;
     setSensorType(value);
+
+    // Set default min and max values based on sensor type
+    if (value === "Temperature") {
+      setMinValue(0);
+      setMaxValue(100);
+    } else if (value === "Humidity" || value === "Soil Moisture") {
+      setMinValue(0);
+      setMaxValue(100);
+    } else if (value === "CO2") {
+      setMinValue(400);
+      setMaxValue(5000);
+    } else if (value === "Soil pH") {
+      setMinValue(3);
+      setMaxValue(10);
+    } else {
+      // Reset values for any other case
+      setMinValue("");
+      setMaxValue("");
+    }
   };
+
   useEffect(() => {
     if (sensorType === "Temperature") {
       setUnitOptions(tempUnits);
@@ -78,14 +99,15 @@ export const AddSensor = ({ onSensorAdded }) => {
     const value = event.target.value;
     setUnit(value);
   };
+
   // Add a function to cancel adding a sensor
   const cancelAdd = () => {
     setOpen(false);
     setSensorName("");
     setSensorType("");
     setSensorDescription("");
-    setMaxValue(0);
-    setMinValue(0);
+    setMaxValue("");
+    setMinValue("");
     setUnit("");
     setErrors({}); // Clear errors when canceling
   };
@@ -100,7 +122,7 @@ export const AddSensor = ({ onSensorAdded }) => {
 
     try {
       const accessToken = localStorage.getItem("accessToken"); // Get the token from local storage
-      const response = await axios.post(
+      const response = await axios.post(// Send a POST request to the server to add a new sensor
         "http://localhost:3001/api/sensors/add",
         {
           sensorName: sensorName,
@@ -126,20 +148,20 @@ export const AddSensor = ({ onSensorAdded }) => {
         confirmButtonColor: "#017148",
       });
 
-      setOpen(false); // Close the modal if you have a modal state
-      onSensorAdded(); // Call the callback function to refresh the sensor list
+      setOpen(false);
+      onSensorAdded(); //## Call the callback function to refresh the sensor list
     } catch (error) {
-      if (error.response.status===402){
+      if (error.response.status === 402) {
         Swal.fire({
           icon: "error",
           title: "Oops...",
           text: "Session expired. Please login again.",
           confirmButtonColor: "#d33",
         });
-        setOpen(false); 
+        setOpen(false);
       } else {
         console.error("Error adding sensor:", error);
-        setOpen(false); // Close the modal if you have a modal state
+        setOpen(false);
         Swal.fire({
           title: "Error",
           text: "There was an error adding the sensor.",
@@ -152,12 +174,11 @@ export const AddSensor = ({ onSensorAdded }) => {
 
   const validateInputs = () => {
     const errors = {};
-    if (!sensorName.length) errors.sensorName = "Sensor Name is required";
+    if (!sensorName) errors.sensorName = "Sensor Name is required";
     if (!sensorType) errors.sensorType = "Sensor Type is required";
-    if (!sensorDescription)
-      errors.sensorDescription = "Description is required";
-    if (!minValue) errors.valueRange = "Min value is required";
-    if (!maxValue) errors.valueRange = "Max value is required";
+    if (!sensorDescription) errors.sensorDescription = "Description is required";
+    if (minValue === "") errors.minValue = "Min value is required";
+    if (maxValue === "") errors.maxValue = "Max value is required";
     if (minValue >= maxValue)
       errors.valueRange = "Min value must be less than Max value";
     if (!unit) errors.unit = "Unit is required";
@@ -191,7 +212,6 @@ export const AddSensor = ({ onSensorAdded }) => {
             <div className="form">
               <div className="sensorName">
                 <Box sx={{ m: 1, width: "50%" }}>
-                  {" "}
                   <TextField
                     id="outlined-basic"
                     label="Sensor Name"
@@ -245,30 +265,28 @@ export const AddSensor = ({ onSensorAdded }) => {
               </div>
               <div className="sensorRange">
                 <Box sx={{ m: 1, width: "50%" }}>
-                  {" "}
                   <TextField
                     id="outlined-basic"
                     label="Min Value"
                     type="number"
                     variant="outlined"
-                    onChange={(e) => setMinValue(e.target.value)}
+                    onChange={(e) => setMinValue(Number(e.target.value))}
                     fullWidth
-                    error={!!errors.valueRange}
-                    helperText={errors.valueRange}
+                    error={!!errors.minValue || !!errors.valueRange}
+                    helperText={errors.minValue || errors.valueRange}
                   />
                 </Box>
 
                 <Box sx={{ m: 1, width: "50%" }}>
-                  {" "}
                   <TextField
                     id="outlined-basic"
                     label="Max Value"
                     type="number"
                     variant="outlined"
-                    onChange={(e) => setMaxValue(e.target.value)}
+                    onChange={(e) => setMaxValue(Number(e.target.value))}
                     fullWidth
-                    error={!!errors.valueRange}
-                    helperText={errors.valueRange}
+                    error={!!errors.maxValue || !!errors.valueRange}
+                    helperText={errors.maxValue || errors.valueRange}
                   />
                 </Box>
               </div>

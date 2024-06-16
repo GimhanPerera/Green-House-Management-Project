@@ -3,9 +3,8 @@ import AddAlertIcon from "@mui/icons-material/AddAlert";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import HistoryIcon from "@mui/icons-material/History";
+import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from "@mui/icons-material/Menu";
-import SensorsIcon from "@mui/icons-material/Sensors";
 import MuiAppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -22,9 +21,8 @@ import Typography from "@mui/material/Typography";
 import { styled, useTheme } from "@mui/material/styles";
 import axios from "axios";
 import * as React from "react";
-import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
-import { useNavigate } from 'react-router-dom'; 
+import { useEffect, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import "./Home.css";
 
 const drawerWidth = 240;
@@ -327,7 +325,7 @@ const handleLogout = () => {
                 }}
               >
                 {" "}
-                <SensorsIcon className="listIcon" />
+                <LogoutIcon className="listIcon" />
               </ListItemIcon>
               <ListItemText sx={{ opacity: open ? 1 : 0 }}>
                 <p className="listItemText">Log Out</p>
