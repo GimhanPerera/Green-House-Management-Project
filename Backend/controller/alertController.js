@@ -13,7 +13,7 @@ const sendAlert = async (userId, sensorDetails) => {
     console.log("EMAIL ",user1.email," ",sensorName)
     const email = user1.email;
     var transporter = nodemailer.createTransport({
-      service: 'gmail',
+      service: 'yahoo',
       auth: {
         user: process.env.EMAIL,
         pass: process.env.PASSWORD
@@ -170,7 +170,7 @@ const getAllAlertDataOfUser = async (req, res) => {
       },
     });
     
-    return "Success";
+    res.status(200).json(alertList);
   } catch (error) {
     console.error(error)
     return "Server error";

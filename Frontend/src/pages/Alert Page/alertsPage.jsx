@@ -87,13 +87,16 @@ const AlertPage = () => {
     { field: 'sensorSensorId', headerName: 'Sensor Id', width: 100 },
   ];
 
-  if(loading) return null;
   return (
     <>
       <Box component="div" sx={{}}>
         <Box component="h1" sx={{ textAlign: 'center', backgroundColor: '#00cc00', color: '#ffffff' }}>Alerts</Box>
       </Box>
       <Container>
+      {loading ? (
+          <Box sx={{ textAlign: 'center', marginTop: '20px' }}>Loading...</Box>
+        ) : (
+          <>
         {/* Table section */}
         <Box sx={{ height: 400, mb: '2rem', marginTop:'20px'}}>
           <StyledDataGrid
@@ -103,6 +106,8 @@ const AlertPage = () => {
             getRowId={(alerts) => alerts.alertId}
           />
         </Box>
+        </>
+        )}
       </Container>
       <ToastContainer />
     </>
